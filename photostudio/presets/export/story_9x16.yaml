@@ -1,0 +1,17 @@
+name: story_9x16
+kind: export
+title: Story / reel 9:16 (1080x1920)
+description: 1080x1920 canvas (9:16), image fitted inside with black padding. JPEG q90 sRGB.
+tags: [social, story, vertical]
+options:
+  format: jpeg
+  quality: 90
+  subsampling: "4:4:4"
+  icc: srgb
+  width: 1080
+  height: 1920
+  fit: pad
+  pad_color: "#000000"
+  sharpen: {target: screen}
+  metadata: copyright
+  name: "{stem}_story"

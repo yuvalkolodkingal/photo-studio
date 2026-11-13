@@ -1,0 +1,10 @@
+name: auto
+kind: mode
+title: Auto (detect from EXIF and image content)
+description: >
+  Placeholder mode. `photo develop --mode auto` runs `modes.detect_mode(meta, image)` (Canon EasyMode / Picture Style /
+  drive + AI Servo / macro tags / exposure time / faces / sky fraction) and then loads the detected mode, with its
+  variant where one was found, e.g. `night:astro`. When confidence is below the threshold the generic `events` mode is
+  used. This file carries no ops of its own.
+tags: [auto]
+stack: []

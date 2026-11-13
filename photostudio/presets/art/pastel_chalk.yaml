@@ -1,0 +1,15 @@
+name: pastel_chalk
+kind: art
+title: Soft pastel
+description: 'Pastel / chalk: XDoG tonal strokes (eps=1.0, all tones) along the flow field, coloured by the photo on toned
+  paper.'
+tags:
+- painterly
+- raster
+stack:
+- op: ink_xdog
+  params:
+    style: pastel
+    colour: 0.85
+options:
+  slot: C

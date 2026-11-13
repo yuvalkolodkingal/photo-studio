@@ -1,0 +1,19 @@
+name: cyanotype
+kind: art
+title: Cyanotype
+description: 'Prussian-blue print on paper: luminance gradient map #0B2545 -> #1D5B8C -> paper white, soft curve, paper tooth.
+  Variant adds a brushed coating border.'
+tags:
+- process
+- retro
+stack:
+- op: cyanotype
+  params: {}
+variants:
+  brushed_border:
+    stack:
+    - op: cyanotype
+      params:
+        brush_border: 50
+options:
+  slot: B

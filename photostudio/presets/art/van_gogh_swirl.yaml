@@ -1,0 +1,26 @@
+name: van_gogh_swirl
+kind: art
+title: Post-impressionist strokes
+description: 'Van Gogh-style: saturated blue / yellow push, Hertzmann expressionist directional strokes (T=50, R=8/4/2, curvature
+  0.25), impasto relief and a line-integral-convolution swirl in calm regions, plus a touch of canvas.'
+tags:
+- painterly
+- raster
+- slow
+stack:
+- op: van_gogh
+  params: {}
+- op: paper_texture
+  params:
+    strength: 0.04
+    fibres: 0.0
+    mode: overlay
+variants:
+  heavy_swirl:
+    stack:
+    - op: van_gogh
+      params:
+        swirl: 1.0
+options:
+  slot: C
+  note: 'Slow: 3-8 s at 1600 px (brush strokes).'

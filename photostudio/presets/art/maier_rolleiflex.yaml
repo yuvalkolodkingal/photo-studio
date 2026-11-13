@@ -1,0 +1,20 @@
+name: maier_rolleiflex
+kind: art
+title: Rolleiflex street B&W
+description: 'Vivian Maier-inspired: long smooth mid-tones, moderate contrast, fine grain, warm paper highlights and soft
+  near-black shadows (square crop optional via letterbox).'
+tags:
+- photographer
+- bw
+stack:
+- op: maier
+  params: {}
+variants:
+  square:
+    stack:
+    - op: letterbox
+      params:
+        aspect: 1.0
+        color: '#000000'
+options:
+  slot: B

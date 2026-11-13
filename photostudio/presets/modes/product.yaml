@@ -1,0 +1,33 @@
+name: product
+kind: mode
+title: Product / still life / food
+description: >
+  Colour accuracy and clean backgrounds. WB should be set from a grey patch (white_balance picker) per session; this
+  preset leaves WB unchanged. lens_correct vignetting on (before any background whitening), exposure +0.1,
+  highlights -10, shadows +5, contrast 0, local_contrast clarity +0.03 / texture +0.08, vibrance 0 and saturation 0
+  (profile-accurate), sharpen amount 0.45, radius 0.9, masking 0.3, minimal denoise (ISO-adaptive).
+  Optional backdrop whitening: a masked exposure +0.3 EV and whites +10 on the inverted ai_subject mask (clean white
+  backdrop; target 243-245 sRGB, not clipped).
+  Variant food: exposure +0.3 EV, whites +10, saturation red -5 (Canon Food mode reduces reddish tones under tungsten),
+  temperature 6200 (slightly cooler), vibrance +6, texture +0.12.
+tags: [product, still-life, food, accuracy]
+stack:
+  - {op: lens_correct, params: {vignetting: true}}
+  - {op: exposure, params: {ev: 0.1}}
+  - {op: highlights_shadows, params: {highlights: -10, shadows: 5}}
+  - {op: local_contrast, params: {clarity: 0.03, texture: 0.08}}
+  - {op: sharpen, params: {amount: 0.45, radius: 0.9, masking: 0.3}}
+  - op: exposure
+    id: backdrop
+    enabled: false
+    params: {ev: 0.3}
+    mask: {type: ai_subject, invert: true, feather: 5}
+variants:
+  food:
+    stack:
+      - {op: exposure, params: {ev: 0.3}}
+      - {op: white_balance, params: {temperature: 6200}}
+      - {op: highlights_shadows, params: {whites: 10}}
+      - {op: hsl_mixer, params: {red_sat: -5}}
+      - {op: vibrance, params: {amount: 6}}
+      - {op: local_contrast, params: {texture: 0.12}}

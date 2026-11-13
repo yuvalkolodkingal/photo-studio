@@ -1,0 +1,15 @@
+name: pro_400h
+kind: art
+title: Pro 400H (emulation)
+description: 'Pastel mint negative: lifted blacks, minty shadows, greens toward cyan, airy pastel highlights. Generic emulation;
+  film and brand names are trademarks of their owners.'
+tags:
+- film
+- color
+stack:
+- op: film_emulation
+  params:
+    stock: pro_400h
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

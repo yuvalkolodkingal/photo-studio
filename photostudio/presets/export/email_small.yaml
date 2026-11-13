@@ -1,0 +1,16 @@
+name: email_small
+kind: export
+title: Email (1024 px small JPEG)
+description: Long edge 1024, JPEG q80, 4:2:0, sRGB, no metadata (no GPS, no serial numbers).
+tags: [email, small]
+options:
+  format: jpeg
+  quality: 80
+  subsampling: "4:2:0"
+  progressive: true
+  optimize: true
+  icc: srgb
+  long_edge: 1024
+  sharpen: {target: screen}
+  metadata: none
+  name: "{stem}_small"

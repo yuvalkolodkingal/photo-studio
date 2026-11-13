@@ -1,0 +1,30 @@
+name: events
+kind: mode
+title: Events / family / travel
+description: >
+  Batch-consistent, skin-safe default for snapshots and travel (also the fallback for `auto` with low confidence).
+  highlights -20, shadows +15, contrast +0.05, vibrance +10, saturation 0, clarity 0, texture 0, sharpen amount 0.40,
+  radius 1.0, masking 0.5, denoise ISO-adaptive. Exposure/WB matching across a set is a batch step (not in the preset).
+  Variants. family: skin-first (vibrance protect_skin 0.7, texture -0.05, sharpen 0.35, orange saturation -2).
+  travel: landscape-leaning for no-face frames (dehaze +0.05, clarity +0.08, vibrance +12, highlights -30,
+  shadows +20, sharpen 0.45).
+tags: [events, family, travel, snapshots]
+stack:
+  - {op: highlights_shadows, params: {highlights: -20, shadows: 15}}
+  - {op: contrast, params: {contrast: 0.05}}
+  - {op: vibrance, params: {amount: 10, protect_skin: 0.6}}
+  - {op: sharpen, params: {amount: 0.40, radius: 1.0, masking: 0.5}}
+variants:
+  family:
+    stack:
+      - {op: vibrance, params: {amount: 8, protect_skin: 0.7}}
+      - {op: hsl_mixer, params: {orange_sat: -2}}
+      - {op: local_contrast, params: {texture: -0.05}}
+      - {op: sharpen, params: {amount: 0.35}}
+  travel:
+    stack:
+      - {op: highlights_shadows, params: {highlights: -30, shadows: 20}}
+      - {op: dehaze, params: {strength: 0.05}}
+      - {op: vibrance, params: {amount: 12}}
+      - {op: local_contrast, params: {clarity: 0.08}}
+      - {op: sharpen, params: {amount: 0.45}}

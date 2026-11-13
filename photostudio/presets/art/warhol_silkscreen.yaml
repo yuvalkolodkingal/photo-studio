@@ -1,0 +1,40 @@
+name: warhol_silkscreen
+kind: art
+title: Silkscreen pop
+description: 'Warhol-style silkscreen: edge-preserving flatten, 4 flat tone bands mapped to a saturated designed palette,
+  dark ink layer printed slightly off-register. Variants tile 2x2 / 3x3 panels with a different palette each.'
+tags:
+- pop
+- raster
+stack:
+- op: warhol
+  params:
+    levels: 4
+    palette: p1
+    mode: luma
+variants:
+  grid_2x2:
+    stack:
+    - op: warhol
+      params:
+        grid: 2x2
+  grid_3x3:
+    stack:
+    - op: warhol
+      params:
+        grid: 3x3
+  turquoise:
+    stack:
+    - op: warhol
+      params:
+        palette: p2
+  kmeans_zones:
+    stack:
+    - op: warhol
+      params:
+        mode: kmeans
+        kmeans_k: 5
+        palette: p3
+options:
+  slot: C
+  note: Look is generic 'silkscreen pop'; do not reproduce specific Warhol works.

@@ -1,0 +1,13 @@
+name: sugimoto_seascape
+kind: art
+title: Long-exposure seascape
+description: 'Hiroshi Sugimoto-style minimalism: horizon split, motion-smoothed water below and soft sky above, low-contrast
+  B&W with lifted blacks and capped highlights, warm-neutral tone, no visible grain.'
+tags:
+- photographer
+- bw
+stack:
+- op: sugimoto_sea
+  params: {}
+options:
+  slot: B

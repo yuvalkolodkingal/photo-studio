@@ -1,0 +1,21 @@
+name: moriyama_are_bure_boke
+kind: art
+title: Are-bure-boke (grain, blur, defocus)
+description: 'Daido Moriyama / Provoke-inspired: crushed high-contrast B&W, huge clumpy grain, random regional motion blur
+  and defocus, tilt, vignette, dust and scratches.'
+tags:
+- photographer
+- bw
+stack:
+- op: moriyama
+  params: {}
+variants:
+  calmer:
+    stack:
+    - op: moriyama
+      params:
+        grain: 0.1
+        blur_len: 8.0
+        dust: 0.3
+options:
+  slot: B

@@ -1,0 +1,13 @@
+name: charcoal_drawing
+kind: art
+title: Charcoal drawing
+description: Charcoal by flow-guided XDoG (wide edge sigma, p=70, eps=0.80) with tonal shading on warm paper.
+tags:
+- painterly
+- raster
+stack:
+- op: ink_xdog
+  params:
+    style: charcoal
+options:
+  slot: C

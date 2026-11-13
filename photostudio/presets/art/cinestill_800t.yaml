@@ -1,0 +1,23 @@
+name: cinestill_800t
+kind: art
+title: 800T tungsten (emulation)
+description: Tungsten-balanced cinema negative with strong red-orange halation around highlights (linear slot-A halation),
+  cool blue daylight cast. Generic emulation; film and brand names are trademarks of their owners.
+tags:
+- film
+- color
+- cinema
+stack:
+- op: halation
+  params:
+    threshold: 0.6
+    knee: 0.4
+    radius: 14
+    strength: 0.9
+- op: film_emulation
+  params:
+    stock: cinestill_800t
+    halation: 0.0
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

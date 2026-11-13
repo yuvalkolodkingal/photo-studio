@@ -1,0 +1,19 @@
+name: halation_glow
+kind: art
+title: Highlight halation
+description: 'Linear-light halation: highlights above 0.6 bleed a red-orange glow (slot A) with a soft bloom, as in cinema
+  negative stocks.'
+tags:
+- film
+- cinema
+stack:
+- op: halation
+  params:
+    threshold: 0.5
+    radius: 22
+    strength: 1.4
+- op: bloom
+  params:
+    strength: 0.25
+options:
+  slot: A

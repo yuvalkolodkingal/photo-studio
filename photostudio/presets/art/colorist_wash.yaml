@@ -1,0 +1,15 @@
+name: colorist_wash
+kind: art
+title: Colourist wash
+description: 'Hertzmann colorist-wash style (T=200, alpha 0.5, RGB jitter 0.3): translucent overlapping strokes with colour
+  jitter.'
+tags:
+- painterly
+- raster
+- slow
+stack:
+- op: painterly
+  params:
+    style: colorist
+options:
+  slot: C

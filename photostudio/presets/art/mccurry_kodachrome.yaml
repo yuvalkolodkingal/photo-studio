@@ -1,0 +1,14 @@
+name: mccurry_kodachrome
+kind: art
+title: Kodachrome-style travel
+description: 'Steve McCurry-inspired travel colour: S-curve with hard highlight clip, blue-tinted shadows, hot reds, deep
+  true blues, crisp micro-contrast, fine mono grain.'
+tags:
+- photographer
+- color
+- film
+stack:
+- op: mccurry
+  params: {}
+options:
+  slot: B

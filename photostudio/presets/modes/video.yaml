@@ -1,0 +1,15 @@
+name: video
+kind: mode
+title: Video frame / log-like grade
+description: >
+  For stills pulled from video or log footage: low-contrast, wide-latitude start that is easy to grade further.
+  exposure 0, highlights -15, shadows +10, contrast -0.05, saturation -5, local_contrast clarity 0, sharpen amount 0.2
+  (video is already sharpened in-camera), vignette off, grain off. A gentle display-referred tone_curve lifts blacks
+  by 0.01 for a cinematic start. There are no raw ops: this mode is meant for JPEG / frame-grab sources.
+tags: [video, frame, grade]
+stack:
+  - {op: highlights_shadows, params: {highlights: -15, shadows: 10}}
+  - {op: contrast, params: {contrast: -0.05}}
+  - {op: saturation, params: {amount: -5}}
+  - {op: sharpen, params: {amount: 0.2, radius: 1.0, masking: 0.5}}
+  - {op: tone_curve, params: {mode: luma, points: [[0.0, 0.01], [1.0, 1.0]]}}

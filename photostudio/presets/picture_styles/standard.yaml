@@ -1,0 +1,11 @@
+name: standard
+kind: picture_style
+title: Canon Standard (approximation)
+description: >
+  APPROXIMATION of the camera's Picture Style, built from Canon's public descriptions (not Canon's actual curves, which are not published). Sharpness maps at about 0.1 sharpen-amount per Canon step (0-7). For a faithful match run: photo calibrate picture-style --dir <folder with CR3+JPEG pairs> --style NAME, which fits a tone curve and 3x3 matrix from your own camera/JPEG pairs. Standard: sharpness 3, boosted saturation and a mild S-curve. Here: saturation +6, luma S-curve (shadows -0.015,
+  highlights +0.015 about mid-grey), sharpen 0.30 radius 1.0.
+tags: [canon, picture-style, approximation]
+stack:
+  - {op: saturation, params: {amount: 6}}
+  - {op: tone_curve, params: {mode: luma, points: [[0.0, 0.0], [0.25, 0.235], [0.5, 0.5], [0.75, 0.765], [1.0, 1.0]]}}
+  - {op: sharpen, params: {amount: 0.30, radius: 1.0, masking: 0.2}}

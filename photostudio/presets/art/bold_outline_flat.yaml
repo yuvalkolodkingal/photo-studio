@@ -1,0 +1,20 @@
+name: bold_outline_flat
+kind: art
+title: Bold-outline flat colour
+description: 'Haring-style bold outlines: three or four flat saturated primaries, white background cluster, thick uniform
+  black outline and short radiating motion lines from strong corners.'
+tags:
+- pop
+- raster
+stack:
+- op: haring
+  params:
+    outline: 9
+variants:
+  no_marks:
+    stack:
+    - op: haring
+      params:
+        radiating: false
+options:
+  slot: C

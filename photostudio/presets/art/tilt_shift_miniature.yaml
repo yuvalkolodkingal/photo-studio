@@ -1,0 +1,11 @@
+name: tilt_shift_miniature
+kind: art
+title: Tilt-shift miniature
+description: 'Miniature-model look: blur grows away from a horizontal in-focus band, boosted saturation and contrast.'
+tags:
+- color
+stack:
+- op: tilt_shift
+  params: {}
+options:
+  slot: B

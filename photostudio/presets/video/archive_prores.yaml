@@ -1,0 +1,24 @@
+name: archive_prores
+kind: video
+title: Archive intermediate - ProRes 422 HQ (10-bit)
+description: >
+  prores_ks 422 HQ in a MOV with uncompressed PCM audio and Apple-style vendor tag. Because the R50 records
+  8-bit 4:2:0 H.264, this protects against generation loss while editing; it does not add source quality. Large files.
+tags: [archive, intermediate, prores, 10bit]
+stack: []
+options:
+  container: mov
+  hdr: tonemap
+  video: {codec: prores, encoder: prores_ks, profile: hq, vendor: apl0, pix_fmt: yuv422p10le, gop: null, no_hw: true}
+  audio: {mode: pcm, codec: pcm_s16le, rate: 48000}
+  movflags: ""
+variants:
+  proxy:
+    options:
+      video: {codec: prores, encoder: prores_ks, profile: proxy, vendor: apl0, pix_fmt: yuv422p10le, gop: null, no_hw: true}
+  lt:
+    options:
+      video: {codec: prores, encoder: prores_ks, profile: lt, vendor: apl0, pix_fmt: yuv422p10le, gop: null, no_hw: true}
+  "4444":
+    options:
+      video: {codec: prores, encoder: prores_ks, profile: "4444", vendor: apl0, pix_fmt: yuv444p10le, gop: null, no_hw: true}

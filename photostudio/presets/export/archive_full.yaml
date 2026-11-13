@@ -1,0 +1,12 @@
+name: archive_full
+kind: export
+title: Archive (full-resolution 16-bit TIFF, Display P3)
+description: Full size 16-bit TIFF in Display P3, no resizing and no output sharpening, all metadata kept. Use as a rendered master.
+tags: [archive, master]
+options:
+  format: tiff
+  bits: 16
+  icc: p3
+  compression: zlib
+  metadata: all
+  name: "{stem}_archive"

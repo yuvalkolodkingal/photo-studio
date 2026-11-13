@@ -1,0 +1,98 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "photostudio"
+version = "0.1.0"
+description = "Scene-referred RAW/JPEG photo studio (Darktable replacement) driven from the CLI and Claude Code"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Yuval Kolodkin Gal" }]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: Multimedia :: Graphics",
+]
+
+dependencies = [
+  "rawpy>=0.26",
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "opencv-contrib-python-headless>=4.9",
+  "pillow>=10.0",
+  "pyyaml>=6.0",
+  "colour-science>=0.4.4",
+  "scikit-image>=0.22",
+  "imagehash>=4.3",
+  "blake3>=0.4",
+  "tifffile>=2023.7",
+]
+
+[project.optional-dependencies]
+meta = ["pyexiftool>=0.5.6"]
+lens = ["lensfunpy>=1.15"]
+video = ["av>=12", "scenedetect>=0.6"]
+heif = ["pillow-heif>=0.16"]
+jxl = ["pillow-jxl-plugin>=1.3"]
+astro = ["astroalign>=2.5"]
+geo = ["reverse_geocoder>=1.5"]
+fast = ["numba>=0.59", "xxhash>=3.4"]
+denoise = ["bm3d>=4.0"]          # non-commercial licence: personal use only
+ai = [
+  "onnxruntime>=1.17",
+  "rembg>=2.0.50",
+  "mediapipe>=0.10",
+  "open_clip_torch>=2.24",
+  "transformers>=4.40",
+]
+yolo = ["ultralytics>=8.1"]       # AGPL-3.0: personal use OK, do not redistribute combined works
+faces = ["insightface>=0.7.3"]    # weights are non-commercial research only; downloaded, never bundled
+serve = ["fastapi", "uvicorn"]
+dev = ["pytest>=8", "ruff>=0.4"]
+all = [
+  "photostudio[serve,meta,lens,video,heif,astro,geo,fast]",
+]
+# everything, including the optional AI stack and the extras with restrictive licences:
+#   denoise (bm3d)      non-commercial licence: personal use only
+#   yolo (ultralytics)  AGPL-3.0: personal use OK, do not redistribute combined works
+#   faces (insightface) model weights are non-commercial research only (downloaded by you, never bundled)
+everything = [
+  "photostudio[all,ai,jxl,denoise,yolo,faces]",
+]
+
+[project.urls]
+Homepage = "https://github.com/yuvalkolodkingal/photo-studio"
+Issues = "https://github.com/yuvalkolodkingal/photo-studio/issues"
+
+[project.scripts]
+photo = "photostudio.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["photostudio*"]
+exclude = ["tests*"]
+
+# Data that must travel inside the wheel for a non-editable `pip install .` (web editor, presets, tag vocabulary, lens data)
+[tool.setuptools.package-data]
+photostudio = [
+  "web/static/**",
+  "presets/**/*.yaml",
+  "data/**",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::UserWarning"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B"]
+ignore = ["E501", "E741", "B008", "B905", "E731"]

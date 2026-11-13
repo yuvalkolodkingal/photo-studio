@@ -1,0 +1,13 @@
+name: matrix_green
+kind: art
+title: Digital-rain green
+description: 'Matrix-style: desaturated with a green cast, deep green shadows, pale green highlights, cool skin, contrast
+  gain 5.'
+tags:
+- cinema
+- color
+stack:
+- op: matrix_green
+  params: {}
+options:
+  slot: B

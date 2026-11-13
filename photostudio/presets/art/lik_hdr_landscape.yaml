@@ -1,0 +1,13 @@
+name: lik_hdr_landscape
+kind: art
+title: HDR landscape
+description: 'Dramatic HDR landscape: base/detail local tone-mapping in log luminance, strong clarity, vivid saturation with
+  warm sunset hues, deep blues, vignette.'
+tags:
+- photographer
+- color
+stack:
+- op: lik_hdr
+  params: {}
+options:
+  slot: B

@@ -1,0 +1,30 @@
+name: pencil_sketch
+kind: art
+title: Pencil sketch
+description: 'Graphite sketch: colour-dodge of grey against its blurred negative, XDoG hatching and graphite grain on paper.
+  Variants: coloured pencil, OpenCV pencilSketch.'
+tags:
+- painterly
+- raster
+stack:
+- op: pencil_sketch
+  params: {}
+variants:
+  coloured_pencil:
+    stack:
+    - op: pencil_sketch
+      params:
+        colour: 0.6
+  opencv:
+    stack:
+    - op: pencil_sketch
+      params:
+        method: opencv
+        colour: 0.5
+  soft_charcoal:
+    stack:
+    - op: pencil_sketch
+      params:
+        sigma: 25.0
+options:
+  slot: C

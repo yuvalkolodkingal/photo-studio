@@ -1,0 +1,18 @@
+name: orton_glow
+kind: art
+title: Orton glow
+description: 'Orton effect: screen+multiply duplicate blurred in at 35%, with highlight protection against dark halos.'
+tags:
+- painterly
+- color
+stack:
+- op: orton
+  params: {}
+variants:
+  subtle:
+    stack:
+    - op: orton
+      params:
+        amount: 0.15
+options:
+  slot: B

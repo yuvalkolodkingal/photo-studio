@@ -1,0 +1,20 @@
+name: watercolor_wash
+kind: art
+title: Watercolour
+description: 'Watercolour: edge-preserving wash, soft-quantised lightness, wet-edge pigment pooling, noise-displaced bleed,
+  granulation and paper tooth in a high-key palette.'
+tags:
+- painterly
+- raster
+stack:
+- op: watercolor
+  params: {}
+variants:
+  loose:
+    stack:
+    - op: watercolor
+      params:
+        bleed: 12
+        levels: 5
+options:
+  slot: C

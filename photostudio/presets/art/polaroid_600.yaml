@@ -1,0 +1,33 @@
+name: polaroid_600
+kind: art
+title: Instant film 600 (emulation)
+description: 'Instant-film look: low contrast, lifted blacks, cyan shadows / warm highlights, magenta mid-tone, soft focus,
+  vignette, white frame. Variant: cleaner cyan ''instax''. Generic emulation; film and brand names are trademarks of their
+  owners.'
+tags:
+- film
+- color
+- retro
+stack:
+- op: film_emulation
+  params:
+    stock: polaroid_600
+- op: border
+  params:
+    style: polaroid
+    width: 40
+    color: '#F4EFE4'
+variants:
+  instax:
+    stack:
+    - op: film_emulation
+      params:
+        stock: instax
+    - op: border
+      params:
+        style: instax
+        width: 34
+        color: '#F8F5EE'
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

@@ -1,0 +1,21 @@
+name: lomo_toy_camera
+kind: art
+title: Toy camera
+description: 'Lomo / Holga-style: strong vignette, saturated punchy colour, blue shadows / warm highlights, chromatic aberration,
+  light leaks. Variant: Holga corner defocus with cross-process.'
+tags:
+- process
+- retro
+- color
+stack:
+- op: lomo
+  params: {}
+variants:
+  holga:
+    stack:
+    - op: lomo
+      params:
+        holga: true
+        cross: 0.5
+options:
+  slot: B

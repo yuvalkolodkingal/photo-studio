@@ -1,0 +1,15 @@
+name: velvia_50
+kind: art
+title: Velvia 50 (emulation)
+description: 'Super-saturated slide film: S-gain 7.5, sat x1.5, magenta-leaning reds, rich greens, deep blues. Generic emulation;
+  film and brand names are trademarks of their owners.'
+tags:
+- film
+- color
+stack:
+- op: film_emulation
+  params:
+    stock: velvia_50
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

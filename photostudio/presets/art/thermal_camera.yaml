@@ -1,0 +1,25 @@
+name: thermal_camera
+kind: art
+title: Thermal camera
+description: 'Thermal imager false colour: smoothed lightness at 320 px through an ironbow ramp with temperature bar. Variants:
+  white-hot, rainbow.'
+tags:
+- process
+- retro
+stack:
+- op: thermal
+  params: {}
+variants:
+  white_hot:
+    stack:
+    - op: thermal
+      params:
+        ramp: white_hot
+        legend: false
+  rainbow:
+    stack:
+    - op: thermal
+      params:
+        ramp: rainbow
+options:
+  slot: B

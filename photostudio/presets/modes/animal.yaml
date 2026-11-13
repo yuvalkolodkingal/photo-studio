@@ -1,0 +1,46 @@
+name: animal
+kind: mode
+title: Animal (wildlife / pets / birds)
+description: >
+  The eye and fine texture decide the shot. Texture, not clarity (clarity makes crunchy halos on fur and feathers).
+  Base (wildlife): highlights -25 / whites -10 (white feathers), shadows +18 (backlit fur), contrast +0.05,
+  vibrance +10 and no saturation; local_contrast texture +0.20, clarity +0.03; capture_sharpen 0.8 (default) plus
+  sharpen amount 0.75, radius 0.9, masking 0.5, so the background noise is not sharpened; denoise stays ISO-adaptive and
+  is stronger at high ISO (luma 50 / chroma 70 base, iso_adapt). A second masked texture +0.15 / sharpen pass runs inside
+  the AI animal mask (skipped when the model is missing), and the background gets texture -0.15, clarity -0.05 and
+  exposure -0.15 EV for separation.
+  Variants: pets (softer, warmer: sharpen 0.55, vibrance +8, shadows +22), birds (strongest sharpening 0.9 and
+  texture +0.25; whites -15; blue/green saturation protected by hsl_mixer).
+tags: [animals, wildlife, pets, birds, texture]
+stack:
+  - {op: highlights_shadows, params: {highlights: -25, whites: -10, shadows: 18}}
+  - {op: contrast, params: {contrast: 0.05}}
+  - {op: vibrance, params: {amount: 10, protect_skin: 0.3}}
+  - {op: local_contrast, params: {texture: 0.20, clarity: 0.03}}
+  - {op: sharpen, params: {amount: 0.75, radius: 0.9, masking: 0.5, halo: 0.5}}
+  - op: sharpen
+    id: subject
+    params: {amount: 0.35, radius: 0.8, masking: 0.3}
+    mask: {type: ai_animal, feather: 3}
+  - op: local_contrast
+    id: bg
+    params: {texture: -0.15, clarity: -0.05}
+    mask: {type: ai_animal, invert: true, feather: 6}
+  - op: exposure
+    id: bg_ev
+    params: {ev: -0.15}
+    mask: {type: ai_animal, invert: true, feather: 8}
+variants:
+  wildlife: {stack: []}
+  pets:
+    stack:
+      - {op: highlights_shadows, params: {highlights: -20, shadows: 22}}
+      - {op: vibrance, params: {amount: 8}}
+      - {op: sharpen, params: {amount: 0.55, radius: 0.9, masking: 0.5}}
+      - {op: local_contrast, params: {texture: 0.15, clarity: 0.0}}
+  birds:
+    stack:
+      - {op: highlights_shadows, params: {highlights: -30, whites: -15, shadows: 15}}
+      - {op: local_contrast, params: {texture: 0.25, clarity: 0.03}}
+      - {op: sharpen, params: {amount: 0.9, radius: 0.8, masking: 0.55, halo: 0.5}}
+      - {op: hsl_mixer, params: {blue_sat: -4, green_sat: -4, green_lum: -3}}

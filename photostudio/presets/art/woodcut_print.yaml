@@ -1,0 +1,13 @@
+name: woodcut_print
+kind: art
+title: Woodcut print
+description: 'Woodcut: flow-guided XDoG with p~100, eps 0.73 and a hard threshold - bold black and cream carved lines.'
+tags:
+- painterly
+- raster
+stack:
+- op: ink_xdog
+  params:
+    style: woodcut
+options:
+  slot: C

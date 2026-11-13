@@ -1,0 +1,23 @@
+name: crt_scanlines
+kind: art
+title: CRT scanlines
+description: 'CRT monitor: scanlines plus RGB aperture-grille triad, glow and slight chromatic shift.'
+tags:
+- retro
+- raster
+stack:
+- op: chromatic_shift
+  params:
+    mode: offset
+    red_dx: 1.5
+    blue_dx: -1.5
+- op: glow
+  params:
+    strength: 0.35
+- op: scanlines
+  params:
+    period: 4
+    strength: 0.3
+    triad: 0.12
+options:
+  slot: C

@@ -1,0 +1,17 @@
+name: film_grain_400
+kind: art
+title: Film grain 400
+description: Luminance-dependent mono grain (sigma 0.04, 1.2 px, midtone-weighted) with a gentle vignette.
+tags:
+- film
+- retro
+stack:
+- op: grain
+  params:
+    amount: 0.04
+    size: 1.2
+- op: vignette
+  params:
+    amount: -0.3
+options:
+  slot: B

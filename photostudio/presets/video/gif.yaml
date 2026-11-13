@@ -1,0 +1,27 @@
+name: gif
+kind: video
+title: Animated GIF (480 px, 12 fps, palette-optimised)
+description: >
+  Two-stage palette GIF (palettegen stats_mode=diff + paletteuse bayer dither) - the quality way to make a GIF with
+  ffmpeg. Use the `webp` variant for a much smaller animated WebP. Audio is dropped.
+tags: [gif, preview, social, webp]
+stack: []
+options:
+  container: gif
+  size: {width: 480}
+  fps: 12
+  hdr: tonemap
+  video: {codec: gif}
+  animation: {dither: bayer, stats: diff, max_colors: 256, loop: 0}
+variants:
+  webp:
+    options:
+      container: webp
+      fps: 15
+      video: {codec: webp}
+      animation: {quality: 70, compression: 5, loop: 0}
+  small:
+    options:
+      size: {width: 320}
+      fps: 10
+      animation: {dither: bayer, stats: diff, max_colors: 128, loop: 0}

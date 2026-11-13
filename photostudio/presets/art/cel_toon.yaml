@@ -1,0 +1,24 @@
+name: cel_toon
+kind: art
+title: Cel / toon shading
+description: 'Cartoon cel shading: half-res bilateral x3, lightness quantised to five soft steps, saturated colour and adaptive-threshold
+  ink outlines.'
+tags:
+- painterly
+- raster
+stack:
+- op: cel_toon
+  params: {}
+variants:
+  xdog_lines:
+    stack:
+    - op: cel_toon
+      params:
+        edge_method: xdog
+  flat:
+    stack:
+    - op: cel_toon
+      params:
+        levels: 3
+options:
+  slot: C

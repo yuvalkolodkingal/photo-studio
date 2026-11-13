@@ -1,0 +1,12 @@
+name: portrait
+kind: picture_style
+title: Canon Portrait (approximation)
+description: >
+  APPROXIMATION of the camera's Picture Style, built from Canon's public descriptions (not Canon's actual curves, which are not published). Sharpness maps at about 0.1 sharpen-amount per Canon step (0-7). For a faithful match run: photo calibrate picture-style --dir <folder with CR3+JPEG pairs> --style NAME, which fits a tone curve and 3x3 matrix from your own camera/JPEG pairs. Portrait: sharpness 2, soft contrast, pleasant warm skin. Here: saturation +3, orange hue +2 and saturation +3
+  (skin), soft luma curve (toe lifted 0.01), sharpen 0.20 radius 1.0 masking 0.5.
+tags: [canon, picture-style, approximation, skin]
+stack:
+  - {op: saturation, params: {amount: 3}}
+  - {op: hsl_mixer, params: {orange_hue: 2, orange_sat: 3, red_sat: 2}}
+  - {op: tone_curve, params: {mode: luma, points: [[0.0, 0.01], [0.25, 0.245], [0.5, 0.5], [0.75, 0.76], [1.0, 1.0]]}}
+  - {op: sharpen, params: {amount: 0.20, radius: 1.0, masking: 0.5}}

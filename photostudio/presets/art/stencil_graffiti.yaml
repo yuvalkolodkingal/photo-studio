@@ -1,0 +1,24 @@
+name: stencil_graffiti
+kind: art
+title: Stencil graffiti
+description: 'Banksy-style spray stencil: Otsu threshold to black / wall, bridges cleaned, soft overspray halo, concrete-wall
+  texture. Variants: a single saturated accent colour, or three tones.'
+tags:
+- pop
+- raster
+stack:
+- op: banksy_stencil
+  params: {}
+variants:
+  accent:
+    stack:
+    - op: banksy_stencil
+      params:
+        accent: true
+  three_tone:
+    stack:
+    - op: banksy_stencil
+      params:
+        levels: 3
+options:
+  slot: C

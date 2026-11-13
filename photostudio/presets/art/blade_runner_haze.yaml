@@ -1,0 +1,19 @@
+name: blade_runner_haze
+kind: art
+title: Orange haze dystopia
+description: 'Blade Runner 2049-style: near-monochrome orange, fog veil, bloom, heavy contrast. The ''la'' variant keeps neon
+  over teal-black shadows.'
+tags:
+- cinema
+- color
+stack:
+- op: blade_runner
+  params: {}
+variants:
+  la:
+    stack:
+    - op: blade_runner
+      params:
+        variant: la
+options:
+  slot: B

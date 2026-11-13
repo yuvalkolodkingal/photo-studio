@@ -1,0 +1,21 @@
+name: portra_400
+kind: art
+title: Portra 400 (emulation)
+description: 'Warm, low-contrast portrait negative: S-gain 3.5, lifted blacks 0.04, cream shoulder, sat 0.9, olive foliage,
+  soft grain. Generic emulation; film and brand names are trademarks of their owners.'
+tags:
+- film
+- color
+stack:
+- op: film_emulation
+  params:
+    stock: portra_400
+variants:
+  pushed:
+    stack:
+    - op: film_emulation
+      params:
+        stock: portra_800
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

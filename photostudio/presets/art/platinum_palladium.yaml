@@ -1,0 +1,13 @@
+name: platinum_palladium
+kind: art
+title: Platinum / palladium print
+description: 'Very long tonal scale, matte warm-neutral gradient #1C1A17 -> #5A4D40 -> #EFE9DD, fine grain, paper texture.'
+tags:
+- process
+- bw
+- retro
+stack:
+- op: platinum
+  params: {}
+options:
+  slot: B

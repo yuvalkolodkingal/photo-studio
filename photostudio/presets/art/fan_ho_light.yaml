@@ -1,0 +1,13 @@
+name: fan_ho_light
+kind: art
+title: Hard light and haze
+description: 'Fan Ho-inspired: S-gain 9 with deep shadows, haze and radial light rays from the brightest highlight, warm-neutral
+  B&W.'
+tags:
+- photographer
+- bw
+stack:
+- op: fan_ho
+  params: {}
+options:
+  slot: B

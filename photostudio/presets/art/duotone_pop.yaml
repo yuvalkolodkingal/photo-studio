@@ -1,0 +1,29 @@
+name: duotone_pop
+kind: art
+title: Duotone
+description: 'Gradient-map duotone (#1B1464 -> #FF2D55) in Oklab with contrast gain 3. Variants: selenium tritone, warm sepia
+  tritone.'
+tags:
+- process
+- retro
+- color
+stack:
+- op: duotone
+  params: {}
+variants:
+  selenium:
+    stack:
+    - op: duotone
+      params:
+        shadow: '#1A1A24'
+        mid: '#B8B4C8'
+        highlight: '#FFFFFF'
+  warm_tritone:
+    stack:
+    - op: duotone
+      params:
+        shadow: '#2B1A0E'
+        mid: '#8B5A2B'
+        highlight: '#F2E6C9'
+options:
+  slot: B

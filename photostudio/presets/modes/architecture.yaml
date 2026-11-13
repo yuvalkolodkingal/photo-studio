@@ -1,0 +1,23 @@
+name: architecture
+kind: mode
+title: Architecture / real estate
+description: >
+  Geometry, dynamic range and neutral whites: bright and airy, verticals corrected.
+  lens_correct (distortion, TCA, vignetting) on, ca_correct auto, perspective auto vertical (strength 0.9, mode crop)
+  and straighten (horizon, max 6 deg); exposure +0.4, highlights -50 (windows), shadows +40, whites +10, blacks +5,
+  contrast -0.02, clarity +0.05, texture +0.05, vibrance +5, saturation -5 (neutral walls), sharpen amount 0.40,
+  radius 1.0, masking 0.2. WB: pick a grey/white wall (white_balance picker) for the dominant light; tungsten lamps need a
+  local WB mask (not set here).
+tags: [architecture, real-estate, interior, geometry]
+stack:
+  - {op: lens_correct, params: {auto: true, distortion: true, tca: true, vignetting: true}}
+  - {op: ca_correct, params: {auto: true}}
+  - {op: straighten, params: {mode: horizon, max_angle: 6.0, crop_mode: crop}}
+  - {op: perspective, params: {auto: vertical, strength: 0.9, mode: crop}}
+  - {op: exposure, params: {ev: 0.4}}
+  - {op: highlights_shadows, params: {highlights: -50, shadows: 40, whites: 10, blacks: 5}}
+  - {op: contrast, params: {contrast: -0.02}}
+  - {op: local_contrast, params: {clarity: 0.05, texture: 0.05}}
+  - {op: vibrance, params: {amount: 5}}
+  - {op: saturation, params: {amount: -5}}
+  - {op: sharpen, params: {amount: 0.40, radius: 1.0, masking: 0.2}}

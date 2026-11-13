@@ -1,0 +1,26 @@
+name: fairey_four_tone
+kind: art
+title: Four-tone stencil poster
+description: 'Fairey ''Hope''-style stencil poster: bilateral + CLAHE luminance posterised to navy / red / light blue / cream
+  with a diagonal split that swaps the middle colours. Flat, no texture. Fine on your own photos; do not reproduce the Obama
+  poster.'
+tags:
+- pop
+- raster
+stack:
+- op: fairey_hope
+  params:
+    split: diagonal
+variants:
+  no_split:
+    stack:
+    - op: fairey_hope
+      params:
+        split: none
+  caption_band:
+    stack:
+    - op: fairey_hope
+      params:
+        caption_band: true
+options:
+  slot: C

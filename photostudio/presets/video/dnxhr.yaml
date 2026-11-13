@@ -1,0 +1,24 @@
+name: dnxhr
+kind: video
+title: DNxHR HQX intermediate (10-bit 4:2:2)
+description: >
+  Avid DNxHR HQX in a MOV (10-bit 4:2:2, resolution independent) with PCM audio, for editors that prefer DNx over ProRes.
+  Variants: hq (8-bit), sq, lb for lighter proxies.
+tags: [intermediate, dnxhr, 10bit]
+stack: []
+options:
+  container: mov
+  hdr: tonemap
+  video: {codec: dnxhr, encoder: dnxhd, profile: dnxhr_hqx, pix_fmt: yuv422p10le, gop: null, no_hw: true}
+  audio: {mode: pcm, codec: pcm_s16le, rate: 48000}
+  movflags: ""
+variants:
+  hq:
+    options:
+      video: {codec: dnxhr, encoder: dnxhd, profile: dnxhr_hq, pix_fmt: yuv422p, gop: null, no_hw: true}
+  sq:
+    options:
+      video: {codec: dnxhr, encoder: dnxhd, profile: dnxhr_sq, pix_fmt: yuv422p, gop: null, no_hw: true}
+  lb:
+    options:
+      video: {codec: dnxhr, encoder: dnxhd, profile: dnxhr_lb, pix_fmt: yuv422p, gop: null, no_hw: true}

@@ -1,0 +1,13 @@
+name: salgado_drama
+kind: art
+title: Dramatic documentary B&W
+description: 'Sebastiao Salgado-inspired: mix 0.45/0.45/0.10, heavy CLAHE local contrast, S-gain 8, burned skies, edge burn,
+  rich pushed-film grain, warm-neutral print tone.'
+tags:
+- photographer
+- bw
+stack:
+- op: salgado
+  params: {}
+options:
+  slot: B

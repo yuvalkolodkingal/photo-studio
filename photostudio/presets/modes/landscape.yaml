@@ -1,0 +1,40 @@
+name: landscape
+kind: mode
+title: Landscape
+description: >
+  Masks do the work: protect the sky, open the land, keep greens believable (Canon Landscape style: sharpness 4,
+  vivid blues and greens, which is rendered here with restraint).
+  highlights -35, shadows +25, whites +8, blacks -8; contrast +0.10; dehaze +0.10 global (more only through the sky
+  mask); local_contrast clarity +0.12 / texture +0.10; vibrance +12; hsl_mixer: greens hue -4 and luminance -6 and
+  saturation -5 (no neon grass), blues saturation -6 and luminance -6 (deeper sky); sharpen amount 0.50, radius 0.9,
+  masking 0.2 (low-ISO base, denoise stays minimal through iso_adapt).
+  Sky: a linear gradient mask over the top 45 % of the frame with exposure -0.4 EV and a gentle dehaze +0.10 (hand-drawn
+  gradient; the ai_sky mask is used by sky_enhance when its model is present). Optional variant `golden_hour` warms
+  with a small split_tone; `overcast` adds contrast and vibrance.
+tags: [landscape, sky, outdoor]
+stack:
+  - {op: highlights_shadows, params: {highlights: -35, shadows: 25, whites: 8, blacks: -8}}
+  - {op: contrast, params: {contrast: 0.10}}
+  - {op: dehaze, params: {strength: 0.10}}
+  - {op: vibrance, params: {amount: 12}}
+  - {op: hsl_mixer, params: {green_hue: -4, green_lum: -6, green_sat: -5, blue_sat: -6, blue_lum: -6}}
+  - {op: local_contrast, params: {clarity: 0.12, texture: 0.10}}
+  - {op: sharpen, params: {amount: 0.50, radius: 0.9, masking: 0.2}}
+  - op: exposure
+    id: sky_grad
+    params: {ev: -0.4}
+    mask: {type: linear, p0: [0.5, 0.0], p1: [0.5, 0.45], feather: 0.5}
+  - op: dehaze
+    id: sky_dehaze
+    params: {strength: 0.10}
+    mask: {type: linear, p0: [0.5, 0.0], p1: [0.5, 0.45], feather: 0.5}
+variants:
+  golden_hour:
+    stack:
+      - {op: split_tone, params: {shadow_hue: 230, shadow_sat: 0.08, highlight_hue: 45, highlight_sat: 0.10, balance: 0.1}}
+      - {op: vibrance, params: {amount: 8}}
+  overcast:
+    stack:
+      - {op: contrast, params: {contrast: 0.15}}
+      - {op: vibrance, params: {amount: 18}}
+      - {op: highlights_shadows, params: {highlights: -20, shadows: 15}}

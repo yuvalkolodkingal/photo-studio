@@ -1,0 +1,13 @@
+name: day_for_night
+kind: art
+title: Day for night
+description: 'Day-for-night: -2.2 EV in linear light, Purkinje blue-green mix, deep-blue tint, desaturation; bright practicals
+  keep warm colour.'
+tags:
+- cinema
+- color
+stack:
+- op: day_for_night
+  params: {}
+options:
+  slot: B

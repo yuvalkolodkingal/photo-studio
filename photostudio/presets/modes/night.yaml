@@ -1,0 +1,47 @@
+name: night
+kind: mode
+title: Night (astro / blue hour / moon)
+description: >
+  Generic night base: exposure +0.5 EV lift with highlights -20 / shadows +10 / blacks -6, contrast +0.10, clarity
+  +0.12 (kept under 0.5), vibrance +20, saturation 0, sharpen amount 0.25 with masking 0.8 (stars must not be
+  sharpened), denoise ISO-adaptive and stronger (luma 60 / chroma 80). Heavy lifting (stacking, gradient removal) is
+  an external workflow; this only sets the single-frame starting point.
+  Variants. astro: temperature 5600 K relative to as-shot (a cooler rendering; Lonely Speck starts near 3900 K in Lightroom, whose scale differs), exposure
+  +1.2 EV, contrast +0.20, clarity +0.2, dehaze +0.12, vibrance +30, lower sharpening 0.2, stronger luma noise 70.
+  Tune WB by pushing vibrance and saturation temporarily, then reset (Lonely Speck method). blue_hour: highlights -40,
+  shadows +30, vibrance +15, no dehaze, temperature 5000 K. moon: temperature 5200 K, exposure -0.3 EV,
+  highlights -30, clarity +0.2, texture +0.30 (the disc), sharpen 0.6, denoise light.
+tags: [night, astro, long-exposure]
+stack:
+  - {op: denoise, params: {luma: 60, chroma: 80, iso_adapt: true}}
+  - {op: exposure, params: {ev: 0.5}}
+  - {op: highlights_shadows, params: {highlights: -20, shadows: 10, blacks: -6}}
+  - {op: contrast, params: {contrast: 0.10}}
+  - {op: vibrance, params: {amount: 20}}
+  - {op: local_contrast, params: {clarity: 0.12}}
+  - {op: sharpen, params: {amount: 0.25, radius: 1.0, masking: 0.8}}
+variants:
+  astro:
+    stack:
+      - {op: denoise, params: {luma: 70, chroma: 85}}
+      - {op: exposure, params: {ev: 1.2}}
+      - {op: white_balance, params: {temperature: 5600}}
+      - {op: contrast, params: {contrast: 0.20}}
+      - {op: dehaze, params: {strength: 0.12}}
+      - {op: local_contrast, params: {clarity: 0.20}}
+      - {op: vibrance, params: {amount: 30}}
+      - {op: sharpen, params: {amount: 0.20, masking: 0.85}}
+  blue_hour:
+    stack:
+      - {op: exposure, params: {ev: 0.2}}
+      - {op: white_balance, params: {temperature: 5000}}
+      - {op: highlights_shadows, params: {highlights: -40, shadows: 30}}
+      - {op: vibrance, params: {amount: 15}}
+  moon:
+    stack:
+      - {op: denoise, params: {luma: 30, chroma: 50}}
+      - {op: exposure, params: {ev: -0.3}}
+      - {op: white_balance, params: {temperature: 5200}}
+      - {op: highlights_shadows, params: {highlights: -30}}
+      - {op: local_contrast, params: {clarity: 0.20, texture: 0.30}}
+      - {op: sharpen, params: {amount: 0.6, radius: 0.9, masking: 0.3}}

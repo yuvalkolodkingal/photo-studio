@@ -1,0 +1,15 @@
+name: portra_160
+kind: art
+title: Portra 160 (emulation)
+description: 'Soft, fine-grained portrait negative: gentle S-curve, restrained saturation 0.88, cream highlight roll-off,
+  olive greens. Generic emulation; film and brand names are trademarks of their owners.'
+tags:
+- film
+- color
+stack:
+- op: film_emulation
+  params:
+    stock: portra_160
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

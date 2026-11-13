@@ -1,0 +1,12 @@
+name: soft_focus_dream
+kind: art
+title: Soft focus
+description: 'Soft-focus lens: sharp core with blurred copy mixed in, highlight bleed and slight contrast drop.'
+tags:
+- retro
+- color
+stack:
+- op: soft_focus
+  params: {}
+options:
+  slot: B

@@ -1,0 +1,15 @@
+name: provia_100f
+kind: art
+title: Provia 100F (emulation)
+description: 'Neutral slide film: S-gain 5, sat 1.15, slightly cyan blues, very fine grain. Generic emulation; film and brand
+  names are trademarks of their owners.'
+tags:
+- film
+- color
+stack:
+- op: film_emulation
+  params:
+    stock: provia_100f
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

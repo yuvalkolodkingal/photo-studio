@@ -1,0 +1,27 @@
+name: lichtenstein_comic
+kind: art
+title: Comic print (Ben-Day)
+description: 'Lichtenstein-style comic print: k-means flat primaries (red / yellow / blue / cream), uniform Ben-Day dots (equal
+  size, regular grid) in skin and sky areas, thick black outlines, white highlight slashes.'
+tags:
+- pop
+- raster
+stack:
+- op: lichtenstein
+  params:
+    pitch: 14
+    outline: 5
+variants:
+  dots_45:
+    stack:
+    - op: lichtenstein
+      params:
+        angle: 45.0
+  fine_dots:
+    stack:
+    - op: lichtenstein
+      params:
+        pitch: 9
+        dot_radius: 0.3
+options:
+  slot: C

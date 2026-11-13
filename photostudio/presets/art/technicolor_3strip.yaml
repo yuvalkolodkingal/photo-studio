@@ -1,0 +1,14 @@
+name: technicolor_3strip
+kind: art
+title: Three-strip Technicolor
+description: 'Technicolor 3-strip: dye-separation matrix, saturation x1.3, crushed cyan-tinted blacks, S-gain 6, mild halation
+  and softening.'
+tags:
+- cinema
+- color
+- retro
+stack:
+- op: technicolor_3strip
+  params: {}
+options:
+  slot: B

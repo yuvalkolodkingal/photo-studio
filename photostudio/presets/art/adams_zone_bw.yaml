@@ -1,0 +1,25 @@
+name: adams_zone_bw
+kind: art
+title: Zone-system B&W
+description: 'Ansel Adams-style: red-filter channel mix in linear light, full zone scale with textured Zone I and IX (no pure
+  black), CLAHE and large-radius local contrast, burned blue skies, fine grain, no vignette.'
+tags:
+- photographer
+- bw
+stack:
+- op: adams_zone
+  params: {}
+variants:
+  orange_filter:
+    stack:
+    - op: adams_zone
+      params:
+        filter: orange
+  neutral:
+    stack:
+    - op: adams_zone
+      params:
+        filter: neutral
+        sky_burn: 0.0
+options:
+  slot: B

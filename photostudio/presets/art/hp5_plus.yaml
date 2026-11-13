@@ -1,0 +1,15 @@
+name: hp5_plus
+kind: art
+title: HP5 Plus (emulation)
+description: 'Flexible B&W film: mix 0.3/0.55/0.15, gentler gain 4.5 than Tri-X, moderate grain. Generic emulation; film and
+  brand names are trademarks of their owners.'
+tags:
+- film
+- bw
+stack:
+- op: film_emulation
+  params:
+    stock: hp5_plus
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

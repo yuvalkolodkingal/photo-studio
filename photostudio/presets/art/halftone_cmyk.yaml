@@ -1,0 +1,29 @@
+name: halftone_cmyk
+kind: art
+title: CMYK halftone print
+description: 'Four rotated dot screens (15/75/0/45 deg) in CMYK inks on paper. Variants: single-screen B&W newsprint, large
+  pitch.'
+tags:
+- pop
+- retro
+- raster
+stack:
+- op: halftone
+  params:
+    mode: cmyk
+    pitch: 12
+variants:
+  newsprint:
+    stack:
+    - op: halftone
+      params:
+        mode: bw
+        pitch: 10
+  big_dots:
+    stack:
+    - op: halftone
+      params:
+        mode: cmyk
+        pitch: 22
+options:
+  slot: C

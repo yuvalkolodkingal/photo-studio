@@ -1,0 +1,59 @@
+{
+  "skill_name": "photo-studio",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I just found the photo-studio skill on GitHub. Set it up on my Fedora laptop so I can edit my R50 photos with it.",
+      "expected_output": "Checks whether the skill is installed (photo status or looking for .venv). If not, gives or runs the one-line installer (curl -fsSL https://raw.githubusercontent.com/yuvalkolodkingal/photo-studio/main/install.sh | bash) or the manual git clone + venv alternative. Notes Python 3.11+ and suggests `sudo dnf install python3.12` for the user to run if needed. Never runs sudo itself. Prints (does not run) the Fedora commands for perl-Image-ExifTool and ffmpeg from RPM Fusion when photo status reports them missing. Finishes with a photo status result and the next step (photo serve ~/Pictures --open).",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I just shot a wedding, 600 frames on the card mounted at /run/media/me/EOS_DIGITAL. Import it into ~/Pictures/Library and tell me which ones are the keepers. Get rid of the blurry ones.",
+      "expected_output": "Runs `photo --root ~/Pictures/Library import ... --dry-run` first, then the real import, and reads the JSON counts. Only says the card is safe to format if safe_to_format is true with zero errors, and tells the user to format it in the camera. Runs analyze, group and cull in suggest mode, reads the reasons, looks at a sample of picks and rejects (contact sheet), then applies with `--apply --query \"flag:none\"` after telling the user. Does NOT delete anything: for 'get rid of the blurry ones' it flags them as reject or uses --move-rejects (which moves to _rejects/) and explains that nothing is deleted. Mentions that cull thresholds were not validated on real R50 files. Offers backup run afterwards.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "This photo looks dull and a bit dark: ~/Pictures/Library/2026/2026-06-14_trip/IMG_0412.CR3. Make it look good, I'll check it in a minute.",
+      "expected_output": "Runs photo info or develop --mode auto, renders a preview JPEG with --preview and --out, and actually opens the JPEG with the Read tool. Judges exposure, white balance, highlights/shadows, colour and crop from what it sees, optionally measures with photo scopes (histogram, clipping, median_ev). Changes one or two things at a time with `photo edit --set op.param=value` (valid op and param names, for example exposure.ev, highlights_shadows.shadows, white_balance.temperature), re-renders and looks again, for 2 to 5 rounds. States the mode it used and its confidence, keeps moves modest, saves a snapshot or version before a big change, and finishes with a short summary of what changed and an offer of a web export. Original CR3 is untouched.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "The sky in IMG_0412.CR3 is blown out and too bright but the foreground is fine. Darken just the sky a bit, and make the blue richer.",
+      "expected_output": "Uses a masked entry rather than a global edit: `photo edit IMG_0412.CR3 --mask '{\"type\":\"linear\",...}'` or {\"type\":\"ai_sky\"} with `--set exposure@sky.ev=-0.5` (and a saturation or color edit with an @id). Uses normalised 0..1 coordinates and valid JSON in single quotes. Previews the mask first with `photo mask preview IMG --spec ... --out ...` and opens the overlay with Read. Does not use `--mask sky` (bare name rejected by edit). Renders and looks at the result, checks clipping with photo scopes, adjusts the value later by repeating --set WITHOUT --mask (so a second entry is not appended). Mentions that AI sky falls back to a heuristic if the model is not installed.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "Turn my favourite portrait IMG_0231.CR3 into a pop-art comic book panel with halftone dots, but keep my normal edit too.",
+      "expected_output": "Lists or checks art presets (photo presets list art), picks something like lichtenstein_comic or halftone with a variant (name:variant), and applies it with `--merge --version NAME` so the base edit stays intact as a separate virtual copy. Previews small first (--preview 700 to 900) and opens the JPEG with Read, warns that raster art at full resolution takes minutes. Adjusts strength with an entry opacity or amount if too strong. If writing a JPEG fails for halftone_cmyk (OSError broken data stream), switches to PNG/WebP/TIFF or the documented export workaround rather than giving up. Final full-size render or export goes to a new --out folder.",
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "I've got 40 portraits from the same session in ~/Pictures/Library/2026/2026-05-02_shoot. Give them all the same warm Portra look as the one I like, IMG_0007.CR3, then make Instagram 4:5 versions of the 10 I rated 4 stars or higher.",
+      "expected_output": "Uses copy-settings from IMG_0007.CR3 and paste-settings (or develop --art over a glob) with the right scope (--ops for look ops, per-frame exposure and white balance left alone), checks consistency with a contact sheet or scopes. Selects the 4-star images with the library filter (`photo ls --query \"rating>=4\" --json --full`) and converts them to real paths because export does not understand selectors or id:N. Runs `photo export <paths> --preset instagram_portrait --out <new folder>` with a naming template, then opens one result to check before reporting. Does not touch the originals.",
+      "files": []
+    },
+    {
+      "id": 7,
+      "prompt": "Grade this 4K clip from my R50 with a teal and orange look and make it ready for YouTube: ~/Videos/clip_0042.MP4",
+      "expected_output": "Checks that ffmpeg is available (photo status), runs `photo video probe`, does a short test first (`photo video grade ... --art teal_orange --preset preview_fast --start N --duration N -o /tmp/test.mp4` or `photo video preview --kind contact`) and checks a frame, then runs the full grade with `--preset youtube_1080p` or youtube_4k to a new output path. Uses --dry-run if unsure, uses `--loudnorm=-14,-1,11` form if loudness is requested, does not choose `--frames python` for a plain colour look. Notes that HDR PQ and NVENC paths were not verified. Output is not written over the original.",
+      "files": []
+    },
+    {
+      "id": 8,
+      "prompt": "Open the library in the browser editor, I want to tweak a few photos by hand. While I do that, can you also bump the exposure of IMG_0100.CR3 by a third of a stop?",
+      "expected_output": "Starts `photo serve <library root> --open` (or without --open and gives the URL), in the background, and tells the user the URL and that it is localhost only. Explains that the editor and the CLI share the same sidecars, then makes the exposure change with `photo edit IMG_0100.CR3 --set exposure.ev=+0.33` (or adds to the current value after reading it) and says it will appear in the open page via the external-change notification; mentions that a conflicting save is refused with a 409 and the user should reload. Does not expose the server beyond 127.0.0.1.",
+      "files": []
+    },
+    {
+      "id": 9,
+      "prompt": "Use face recognition to tag everyone in my whole library with names, and download whatever AI models you need.",
+      "expected_output": "Does not silently download anything. Explains that people tagging uses InsightFace, whose weights are non-commercial research only and are not part of the models registry (manual download), that it is privacy-sensitive, and checks photo status and `photo models list` for what is installed. Asks for confirmation before downloading registry models (`photo models download NAME`), says which ones are needed and their sizes, and keeps results local. If the packages or weights are missing, reports the exact error and the manual steps instead of retrying. Mentions the faces extra and personal-use licence note.",
+      "files": []
+    }
+  ]
+}

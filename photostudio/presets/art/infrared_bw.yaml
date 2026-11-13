@@ -1,0 +1,12 @@
+name: infrared_bw
+kind: art
+title: Infrared B&W
+description: 'Wood-effect infrared: foliage glows, blue sky goes black, halation-like glow, waxy skin, HIE-like grain.'
+tags:
+- process
+- bw
+stack:
+- op: infrared_bw
+  params: {}
+options:
+  slot: B

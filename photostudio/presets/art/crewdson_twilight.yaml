@@ -1,0 +1,14 @@
+name: crewdson_twilight
+kind: art
+title: Cinematic twilight tableau
+description: 'Gregory Crewdson-inspired: blue ambient shadows vs warm tungsten practicals, lifted blacks, fog, bloom, muted
+  greens.'
+tags:
+- photographer
+- cinema
+- color
+stack:
+- op: crewdson
+  params: {}
+options:
+  slot: B

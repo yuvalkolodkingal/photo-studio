@@ -1,0 +1,13 @@
+name: daguerreotype
+kind: art
+title: Daguerreotype
+description: 'Mirror-silver plate: blue-weighted mono, extreme detail, low Dmax, violet/bronze edge tarnish, oval vignette,
+  scratches.'
+tags:
+- process
+- retro
+stack:
+- op: daguerreotype
+  params: {}
+options:
+  slot: B

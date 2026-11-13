@@ -1,0 +1,16 @@
+name: wallpaper_4k
+kind: export
+title: Wallpaper 4K (3840x2160)
+description: 3840x2160 (16:9) centre crop (fit cover), no upscaling beyond source, JPEG q92 sRGB.
+tags: [wallpaper, screen]
+options:
+  format: jpeg
+  quality: 92
+  subsampling: "4:4:4"
+  icc: srgb
+  width: 3840
+  height: 2160
+  fit: cover
+  sharpen: {target: screen}
+  metadata: none
+  name: "{stem}_4k"

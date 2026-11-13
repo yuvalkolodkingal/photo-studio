@@ -1,0 +1,40 @@
+name: portrait
+kind: mode
+title: Portrait
+description: >
+  Skin-first, soft and conservative (Canon Portrait style: sharpness 2 vs 3, natural skin).
+  exposure ev +0.15 (nudges faces towards L* 65-72; tune per shot); contrast -0.05 (about -10 vs Standard);
+  highlights_shadows highlights -20 (forehead / hair speculars), shadows +10;
+  vibrance +5 (protect_skin 0.7), saturation 0; local_contrast texture -0.10 and clarity 0 (never positive clarity on
+  skin); sharpen amount 0.30, radius 1.0, masking 0.7 so skin is barely sharpened (Canon sharpness 2 ~ 25-35 on
+  a 0-150 scale); hsl_mixer orange saturation -3 and luminance +3 (skin band) and a gentle teeth/eyes pass.
+  skin_smooth runs only inside the AI skin mask at 0.35 (texture kept at 0.9); eye_enhance 0.3 inside the eye mask.
+  Both retouch entries are masked ai_* entries and are skipped (with a note) when the models are not installed.
+  Denoise stays ISO-adaptive (luma 50 / chroma 70 base). All values are starting points, not a finished edit.
+tags: [people, skin, soft]
+stack:
+  - {op: exposure, params: {ev: 0.15}}
+  - {op: highlights_shadows, params: {highlights: -20, shadows: 10}}
+  - {op: contrast, params: {contrast: -0.05}}
+  - {op: vibrance, params: {amount: 5, protect_skin: 0.7}}
+  - {op: hsl_mixer, params: {orange_sat: -3, orange_lum: 3, red_sat: -2}}
+  - {op: local_contrast, params: {texture: -0.10, clarity: 0.0}}
+  - {op: sharpen, params: {amount: 0.30, radius: 1.0, masking: 0.7, halo: 0.4}}
+  - op: skin_smooth
+    id: skin
+    params: {amount: 0.35, texture: 0.9, even_tone: 0.25}
+    mask: {type: ai_skin, feather: 4}
+  - op: eye_enhance
+    id: eyes
+    params: {amount: 0.3}
+    mask: {type: ai_eyes, feather: 2}
+variants:
+  high_key:
+    stack:
+      - {op: exposure, params: {ev: 0.45}}
+      - {op: highlights_shadows, params: {highlights: -35, shadows: 20, whites: 5}}
+  low_key:
+    stack:
+      - {op: exposure, params: {ev: -0.25}}
+      - {op: highlights_shadows, params: {highlights: -10, shadows: -5, blacks: -8}}
+      - {op: contrast, params: {contrast: 0.05}}

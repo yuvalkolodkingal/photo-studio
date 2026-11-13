@@ -1,0 +1,16 @@
+name: expressionist_paint
+kind: art
+title: Expressionist paint
+description: Hertzmann expressionist style (T=50, curvature filter 0.25, alpha 0.7, value jitter) for bold directional strokes
+  in the original colours.
+tags:
+- painterly
+- raster
+- slow
+stack:
+- op: painterly
+  params:
+    style: expressionist
+options:
+  slot: C
+  note: 'Slow: ~3 s at 1600 px.'

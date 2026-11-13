@@ -1,0 +1,36 @@
+name: risograph
+kind: art
+title: Risograph
+description: 'Two-ink Riso print: optical-density least-squares separation, AM dot screens + grain, per-layer misregistration,
+  multiply overprint on cream paper. Variants: teal/red, blue/yellow.'
+tags:
+- process
+- retro
+- raster
+stack:
+- op: risograph
+  params: {}
+variants:
+  teal_red:
+    stack:
+    - op: risograph
+      params:
+        inks:
+        - '#00838A'
+        - '#F15060'
+  blue_yellow:
+    stack:
+    - op: risograph
+      params:
+        inks:
+        - '#0078BF'
+        - '#FFE800'
+  green_pink:
+    stack:
+    - op: risograph
+      params:
+        inks:
+        - '#00A95C'
+        - '#FF48B0'
+options:
+  slot: C

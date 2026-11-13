@@ -1,0 +1,20 @@
+name: bleach_bypass
+kind: art
+title: Bleach bypass
+description: 'Bleach bypass: saturation -45% (range 35-59%), luminosity S-curve, B&W overlay, silvery desaturated highlights,
+  grain.'
+tags:
+- cinema
+- color
+stack:
+- op: bleach_bypass
+  params: {}
+variants:
+  strong:
+    stack:
+    - op: bleach_bypass
+      params:
+        desat: 0.59
+        overlay: 0.7
+options:
+  slot: B

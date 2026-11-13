@@ -1,0 +1,20 @@
+name: mosaic_tesserae
+kind: art
+title: Mosaic
+description: 'Mosaic of tesserae: SLIC superpixels filled with mean colour, dark grout, per-tile light variation and bevel.
+  Grid variant for square tiles.'
+tags:
+- painterly
+- raster
+stack:
+- op: mosaic
+  params: {}
+variants:
+  grid:
+    stack:
+    - op: mosaic
+      params:
+        shape: grid
+        tiles: 3000
+options:
+  slot: C

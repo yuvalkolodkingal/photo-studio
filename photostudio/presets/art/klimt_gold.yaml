@@ -1,0 +1,14 @@
+name: klimt_gold
+kind: art
+title: Gold-leaf ornament
+description: 'Klimt-style: the salient subject stays photographic, the background becomes gold-leaf SLIC tiles with spiral,
+  circle and square motifs, metallic noise and glints.'
+tags:
+- painterly
+- raster
+stack:
+- op: klimt
+  params: {}
+options:
+  slot: C
+  note: Segmentation is saliency + GrabCut (heuristic); ~2 s at 1600 px.

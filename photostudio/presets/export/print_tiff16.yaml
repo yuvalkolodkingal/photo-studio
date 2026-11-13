@@ -1,0 +1,14 @@
+name: print_tiff16
+kind: export
+title: Print master (16-bit TIFF, Adobe RGB, 300 dpi)
+description: Full resolution 16-bit TIFF in Adobe RGB with the ICC profile embedded, 300 dpi, light print sharpening for matte paper, all metadata kept.
+tags: [print, master]
+options:
+  format: tiff
+  bits: 16
+  icc: adobe
+  dpi: 300
+  compression: zlib
+  sharpen: {target: print_matte}
+  metadata: all
+  name: "{stem}_print"

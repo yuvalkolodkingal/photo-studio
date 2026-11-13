@@ -1,0 +1,15 @@
+name: print_film_2383
+kind: art
+title: Print-film look (procedural)
+description: 'Kodak 2383-style procedural print emulation: cyan-leaning dense shadows, soft S-curve, warm highlights. For
+  the real LUT, download the free LUTs and apply with lut3d.'
+tags:
+- cinema
+- film
+- color
+stack:
+- op: print_film
+  params: {}
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

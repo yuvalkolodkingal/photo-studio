@@ -1,0 +1,24 @@
+name: solarization
+kind: art
+title: Solarisation (Sabattier)
+description: 'Sabattier effect: tone curve folded above the threshold with Mackie-line edge halos. Variants: luminance-only
+  or B&W.'
+tags:
+- process
+- retro
+stack:
+- op: solarize
+  params: {}
+variants:
+  luma:
+    stack:
+    - op: solarize
+      params:
+        mode: luma
+  bw:
+    stack:
+    - op: solarize
+      params:
+        mode: bw
+options:
+  slot: B

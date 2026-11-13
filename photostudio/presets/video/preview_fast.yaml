@@ -1,0 +1,15 @@
+name: preview_fast
+kind: video
+title: Fast preview (540p H.264, hardware encoder when available)
+description: >
+  Small, quick preview render for checking a grade: max 540 px high, x264 veryfast CRF 28 (NVENC when a GPU is
+  detected), low-bitrate AAC. Never upscales.
+tags: [preview, draft, h264]
+stack: []
+options:
+  container: mp4
+  size: {max_height: 540}
+  hdr: tonemap
+  video: {codec: h264, encoder: libx264, preset: veryfast, crf: 28, profile: main, pix_fmt: yuv420p, gop: fps, bframes: 2}
+  audio: {mode: aac, codec: aac, bitrate: 96k, rate: 48000, channels: 2}
+  movflags: +faststart

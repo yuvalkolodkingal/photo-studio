@@ -1,0 +1,16 @@
+name: superia_400
+kind: art
+title: Superia 400 (emulation)
+description: 'Everyday consumer negative: gain 4.5, punchy greens and cyans, warm reds, slightly magenta mid-tones. Generic
+  emulation; film and brand names are trademarks of their owners.'
+tags:
+- film
+- color
+- retro
+stack:
+- op: film_emulation
+  params:
+    stock: superia_400
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

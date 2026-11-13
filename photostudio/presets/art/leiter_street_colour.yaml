@@ -1,0 +1,13 @@
+name: leiter_street_colour
+kind: art
+title: Layered street colour
+description: 'Saul Leiter-inspired: muted global saturation with warm reds and yellows kept rich (reds toward orange), lifted
+  midtones and blacks, green-cyan shadows, amber highlights, soft haze, colour grain.'
+tags:
+- photographer
+- color
+stack:
+- op: leiter
+  params: {}
+options:
+  slot: B

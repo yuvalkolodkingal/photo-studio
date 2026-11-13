@@ -1,0 +1,43 @@
+name: youtube_4k
+kind: video
+title: YouTube 4K / 2160p (H.264 High, or HEVC 10-bit)
+description: >
+  YouTube's 2160p upload guidance (35-45 Mbps for 24-30 fps, 53-68 Mbps for 48-60 fps): H.264 High, CRF 20 with a
+  maxrate cap, closed GOP of half the frame rate, 2 B-frames, BT.709 tags, AAC-LC 48 kHz. The `hevc` variant is
+  smaller and keeps gradients cleaner from 8-bit sources (10-bit encode).
+tags: [youtube, 4k, h264, hevc, sdr, delivery]
+stack: []
+options:
+  container: mp4
+  size: {max_height: 2160}
+  hdr: tonemap
+  video:
+    codec: h264
+    encoder: libx264
+    preset: slow
+    crf: 20
+    profile: high
+    pix_fmt: yuv420p
+    gop: half_fps
+    bframes: 2
+    maxrate: {"<=30": 45M, ">30": 68M}
+    bufsize: {"<=30": 90M, ">30": 136M}
+  audio: {mode: auto, codec: aac, bitrate: 384k, rate: 48000, channels: 2}
+  movflags: +faststart
+  guidance:
+    source: https://support.google.com/youtube/answer/1722171
+    recommended_bitrate_mbps: {"24-30 fps": "35-45", "48-60 fps": "53-68"}
+variants:
+  hevc:
+    options:
+      video:
+        codec: hevc
+        encoder: libx265
+        preset: medium
+        crf: 22
+        pix_fmt: yuv420p10le
+        gop: half_fps
+        bframes: 2
+        tag: hvc1
+        maxrate: {"<=30": 45M, ">30": 68M}
+        bufsize: {"<=30": 90M, ">30": 136M}

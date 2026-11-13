@@ -1,0 +1,21 @@
+name: monet_impressionist
+kind: art
+title: Impressionist dabs
+description: 'Monet-style: lifted blacks, violet shadows, cream highlights and Hertzmann impressionist strokes (T=100, R=8/4/2)
+  for soft broken colour.'
+tags:
+- painterly
+- raster
+- slow
+stack:
+- op: monet
+  params: {}
+variants:
+  wash:
+    stack:
+    - op: monet
+      params:
+        style: colorist
+options:
+  slot: C
+  note: 'Slow: ~2 s at 1600 px.'

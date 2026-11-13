@@ -1,0 +1,18 @@
+name: sports
+kind: mode
+title: Sports / action
+description: >
+  Punchy, cool-neutral render with moderate noise reduction; culling is a separate step.
+  exposure +0.1 (faces under caps / helmets), highlights -20, shadows +20, contrast +0.12, vibrance +10,
+  local_contrast clarity +0.10 / texture +0.10, sharpen amount 0.60, radius 1.0, masking 0.4 (the sharpen halo is
+  limited to 0.4), denoise ISO-adaptive and a little stronger (luma 55 / chroma 70) for ISO 3200-12800.
+  For indoor gyms set a fixed Kelvin for the whole set in white_balance to avoid flicker-induced drift.
+tags: [sports, action, burst]
+stack:
+  - {op: denoise, params: {luma: 55, chroma: 70, iso_adapt: true}}
+  - {op: exposure, params: {ev: 0.1}}
+  - {op: highlights_shadows, params: {highlights: -20, shadows: 20}}
+  - {op: contrast, params: {contrast: 0.12}}
+  - {op: vibrance, params: {amount: 10}}
+  - {op: local_contrast, params: {clarity: 0.10, texture: 0.10}}
+  - {op: sharpen, params: {amount: 0.60, radius: 1.0, masking: 0.4, halo: 0.4}}

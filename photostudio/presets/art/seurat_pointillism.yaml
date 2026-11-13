@@ -1,0 +1,26 @@
+name: seurat_pointillism
+kind: art
+title: Pointillism
+description: 'Seurat-style pointillism: jittered-grid dots coloured from the image with HSV jitter, 12% complementary-hue
+  dots for optical mixing, on a cream canvas.'
+tags:
+- painterly
+- raster
+stack:
+- op: pointillism
+  params: {}
+variants:
+  hertzmann:
+    stack:
+    - op: painterly
+      params:
+        style: pointillist
+        init: paper
+        paper: '#F1E8D6'
+  fine:
+    stack:
+    - op: pointillism
+      params:
+        radius: 4.5
+options:
+  slot: C

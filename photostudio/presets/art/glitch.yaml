@@ -1,0 +1,21 @@
+name: glitch
+kind: art
+title: Glitch
+description: 'Digital glitch: displaced row bands, RGB misalignment, JPEG crush with macroblock corruption, pixel sorting,
+  scanlines, neon noise bands.'
+tags:
+- retro
+- raster
+stack:
+- op: glitch
+  params: {}
+variants:
+  mild:
+    stack:
+    - op: glitch
+      params:
+        bands: 5
+        corrupt: 3
+        sort_bands: 0
+options:
+  slot: C

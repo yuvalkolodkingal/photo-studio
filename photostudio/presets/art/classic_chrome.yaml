@@ -1,0 +1,15 @@
+name: classic_chrome
+kind: art
+title: Classic Chrome (simulation)
+description: 'Muted documentary slide simulation: sat 0.75, brick reds, cyan-grey blues, desaturated highlights, fine mono
+  grain. Generic emulation; film and brand names are trademarks of their owners.'
+tags:
+- film
+- color
+stack:
+- op: film_emulation
+  params:
+    stock: classic_chrome
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

@@ -1,0 +1,27 @@
+name: pixel_art
+kind: art
+title: Pixel art
+description: 'Pixel art: area downscale to 128 columns, 24-colour Oklab k-means palette, integer nearest-neighbour upscale.
+  Variants: 64 cells, 16 colours with Bayer dither.'
+tags:
+- painterly
+- retro
+- raster
+stack:
+- op: pixel_art
+  params: {}
+variants:
+  chunky:
+    stack:
+    - op: pixel_art
+      params:
+        cells: 64
+        colors: 16
+  dithered:
+    stack:
+    - op: pixel_art
+      params:
+        colors: 16
+        dither: bayer
+options:
+  slot: C

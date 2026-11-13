@@ -1,0 +1,29 @@
+name: tintype_wet_plate
+kind: art
+title: Wet-plate tintype
+description: 'Collodion tintype: blue-only spectral sensitivity (0/0.25/0.75 mix in linear slot A) - reds dark, eyes light
+  - short tonal scale, pour marks, chemical edge fog, edge defocus, dust. Variant: ruby / gold toning.'
+tags:
+- process
+- retro
+- bw
+stack:
+- op: spectral_mix
+  params:
+    mode: mono
+    weights:
+    - 0.0
+    - 0.25
+    - 0.75
+- op: wet_plate
+  params:
+    spectral_mix: false
+variants:
+  ruby_gold:
+    stack:
+    - op: wet_plate
+      params:
+        tone: ruby_gold
+        spectral_mix: false
+options:
+  slot: A+B

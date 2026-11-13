@@ -1,0 +1,15 @@
+name: ektar_100
+kind: art
+title: Ektar 100 (emulation)
+description: 'Vivid fine-grain negative: S-gain 6, saturation x1.35, strong reds and deep blues, very fine grain. Generic
+  emulation; film and brand names are trademarks of their owners.'
+tags:
+- film
+- color
+stack:
+- op: film_emulation
+  params:
+    stock: ektar_100
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

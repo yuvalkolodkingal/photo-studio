@@ -1,0 +1,12 @@
+name: lith_print
+kind: art
+title: Lith print
+description: 'Lith print: peach soft highlights, hard cold shadows, grain concentrated in the shadows, split tone.'
+tags:
+- process
+- bw
+stack:
+- op: lith
+  params: {}
+options:
+  slot: B

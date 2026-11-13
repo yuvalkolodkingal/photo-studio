@@ -1,0 +1,12 @@
+name: gum_bichromate
+kind: art
+title: Gum bichromate
+description: Three misregistered pigment layers on heavy paper with brush-edged borders, lifted blacks and muted saturation.
+tags:
+- process
+- retro
+stack:
+- op: gum_bichromate
+  params: {}
+options:
+  slot: C

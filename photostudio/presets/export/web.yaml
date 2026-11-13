@@ -1,0 +1,16 @@
+name: web
+kind: export
+title: Web (2048 px sRGB JPEG)
+description: JPEG q88, 4:4:4, progressive, long edge 2048, screen output sharpening, sRGB ICC. Strips GPS and serial numbers (keeps copyright).
+tags: [web, share]
+options:
+  format: jpeg
+  quality: 88
+  subsampling: "4:4:4"
+  progressive: true
+  optimize: true
+  icc: srgb
+  long_edge: 2048
+  sharpen: {target: screen}
+  metadata: copyright
+  name: "{stem}_web"

@@ -1,0 +1,19 @@
+name: ink_line_art
+kind: art
+title: Ink line art (XDoG)
+description: 'Pen-and-ink by XDoG (Winnemoeller 2012, k=1.6, p~20, hard tanh threshold): black lines and hatching on white.'
+tags:
+- painterly
+- raster
+stack:
+- op: ink_xdog
+  params:
+    style: ink
+variants:
+  pencil:
+    stack:
+    - op: ink_xdog
+      params:
+        style: pencil
+options:
+  slot: C

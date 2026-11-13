@@ -1,0 +1,20 @@
+name: expired_film
+kind: art
+title: Expired film
+description: 'Expired film: lifted fog blacks, random magenta or green shadow cast, low contrast, heavy coloured grain, light
+  leaks. Generic emulation; film and brand names are trademarks of their owners.'
+tags:
+- film
+- color
+- retro
+stack:
+- op: film_emulation
+  params:
+    stock: expired
+- op: light_leak
+  params:
+    strength: 0.35
+    count: 2
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

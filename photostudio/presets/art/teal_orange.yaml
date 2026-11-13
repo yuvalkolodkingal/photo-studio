@@ -1,0 +1,25 @@
+name: teal_orange
+kind: art
+title: Teal and orange
+description: 'Blockbuster grade: shadows pushed toward teal, highlights toward orange (Oklch hue lerp), chroma boost, skin
+  protected, S-gain 4.'
+tags:
+- cinema
+- color
+stack:
+- op: teal_orange
+  params:
+    amount: 0.5
+variants:
+  strong:
+    stack:
+    - op: teal_orange
+      params:
+        amount: 0.7
+  subtle:
+    stack:
+    - op: teal_orange
+      params:
+        amount: 0.3
+options:
+  slot: B

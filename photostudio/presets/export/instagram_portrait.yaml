@@ -1,0 +1,18 @@
+name: instagram_portrait
+kind: export
+title: Instagram portrait 4:5 (1080x1350)
+description: 1080x1350 canvas (4:5), image fitted inside with white padding (use fit cover to crop instead). JPEG q90 sRGB, screen sharpening.
+tags: [social, instagram]
+options:
+  format: jpeg
+  quality: 90
+  subsampling: "4:4:4"
+  progressive: true
+  icc: srgb
+  width: 1080
+  height: 1350
+  fit: pad
+  pad_color: "#ffffff"
+  sharpen: {target: screen}
+  metadata: copyright
+  name: "{stem}_ig45"

@@ -1,0 +1,55 @@
+name: wes_anderson_pastel
+kind: art
+title: Pastel palette remap
+description: 'Wes Anderson-style: k-means clusters remapped to an exact `wesanderson` palette (GrandBudapest2 pink/lavender
+  by default), blended 55/45 with the original, lowered contrast, lifted blacks, warm. Variants swap the palette.'
+tags:
+- cinema
+- color
+stack:
+- op: wes_anderson
+  params:
+    palette: GrandBudapest2
+variants:
+  grand_budapest:
+    stack:
+    - op: wes_anderson
+      params:
+        palette: GrandBudapest2
+  moonrise:
+    stack:
+    - op: wes_anderson
+      params:
+        palette: Moonrise3
+  darjeeling:
+    stack:
+    - op: wes_anderson
+      params:
+        palette: Darjeeling1
+  royal:
+    stack:
+    - op: wes_anderson
+      params:
+        palette: Royal1
+  isle_of_dogs:
+    stack:
+    - op: wes_anderson
+      params:
+        palette: IsleofDogs2
+  asteroid_city:
+    stack:
+    - op: wes_anderson
+      params:
+        palette: AsteroidCity1
+  zissou:
+    stack:
+    - op: wes_anderson
+      params:
+        palette: Zissou1
+  fantastic_fox:
+    stack:
+    - op: wes_anderson
+      params:
+        palette: FantasticFox1
+options:
+  slot: B

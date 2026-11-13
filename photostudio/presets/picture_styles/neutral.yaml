@@ -1,0 +1,10 @@
+name: neutral
+kind: picture_style
+title: Canon Neutral (approximation)
+description: >
+  APPROXIMATION of the camera's Picture Style, built from Canon's public descriptions (not Canon's actual curves, which are not published). Sharpness maps at about 0.1 sharpen-amount per Canon step (0-7). For a faithful match run: photo calibrate picture-style --dir <folder with CR3+JPEG pairs> --style NAME, which fits a tone curve and 3x3 matrix from your own camera/JPEG pairs. Neutral: natural colour, lower contrast and saturation, made for later editing. Here: saturation -4, a slightly
+  flat luma curve (blacks 0.005 up, whites 0.005 down), no sharpening.
+tags: [canon, picture-style, approximation, flat]
+stack:
+  - {op: saturation, params: {amount: -4}}
+  - {op: tone_curve, params: {mode: luma, points: [[0.0, 0.005], [0.25, 0.25], [0.5, 0.5], [0.75, 0.75], [1.0, 0.995]]}}

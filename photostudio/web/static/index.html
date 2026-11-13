@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photo Studio</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23222'/%3E%3Ccircle cx='8' cy='8' r='4' fill='none' stroke='%235aa9e6' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand">Photo Studio</div>
+    <nav id="modes" class="seg">
+      <button data-view="library" class="active" title="Library (G)">Library</button>
+      <button data-view="develop" title="Develop (D)">Develop</button>
+    </nav>
+    <div id="topname" class="topname"></div>
+    <div class="spacer"></div>
+    <div id="topdevelop" class="toolgroup hidden">
+      <div class="seg" id="zoomseg">
+        <button data-zoom="fit" title="Fit (Z toggles fit / 100%)">Fit</button>
+        <button data-zoom="fill" title="Fill">Fill</button>
+        <button data-zoom="1" title="100%">1:1</button>
+        <button data-zoom="2" title="200%">2:1</button>
+      </div>
+      <div class="seg" id="baseg">
+        <button data-ba="off" class="active" title="Edited only">After</button>
+        <button data-ba="split" title="Before / after split (Y)">Split</button>
+        <button data-ba="before" title="Hold \ to peek at the original">Before</button>
+      </div>
+      <button id="btnUndo" title="Undo (Ctrl+Z)">Undo</button>
+      <button id="btnRedo" title="Redo (Ctrl+Shift+Z)">Redo</button>
+    </div>
+    <div id="busy" class="busy hidden" title="Rendering"></div>
+    <div id="saveind" class="saveind" title="Sidecar autosave"></div>
+    <button id="btnExport" class="primary" title="Export (Ctrl+E)">Export</button>
+    <button id="btnHelp" title="Keyboard shortcuts (?)">?</button>
+  </header>
+  <main id="main">
+    <section id="view-library" class="view"></section>
+    <section id="view-develop" class="view hidden"></section>
+  </main>
+</div>
+<div id="toasts"></div>
+<div id="modal-root"></div>
+<noscript><p style="padding:2em;color:#ccc">Photo Studio needs JavaScript (it runs entirely on this computer).</p></noscript>
+<script type="module" src="/static/js/main.js"></script>
+</body>
+</html>

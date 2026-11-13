@@ -1,0 +1,32 @@
+name: street
+kind: mode
+title: Street / documentary
+description: >
+  Black and white by default: monochrome with a neutral panchromatic filter, S-curve with lifted toe, clarity and
+  grain. Colour variant `color` keeps colour with a restrained look.
+  Base: monochrome filter panchromatic (weights ~0.36/0.54/0.10 on linear Rec.2020); contrast +0.25; blacks -12,
+  whites +8; local_contrast clarity +0.20, texture +0.10; dehaze +0.05; tone_curve luma S (toe lifted 0.02);
+  grain amount 0.03, size 1.2, roughness 0.5 (about ISO 800), midtone_bias 0.7; sharpen amount 0.50, radius 1.0,
+  masking 0.25; vignette -0.15.
+  Variant `color`: no monochrome and no grain; contrast +0.10, vibrance +8, highlights -15, shadows +15, clarity +0.10.
+  Verticals are NOT auto-corrected here (add `straighten` / `perspective` to taste).
+tags: [street, documentary, bw, grain]
+stack:
+  - {op: monochrome, params: {filter: panchromatic}}
+  - {op: highlights_shadows, params: {blacks: -12, whites: 8}}
+  - {op: contrast, params: {contrast: 0.25}}
+  - {op: dehaze, params: {strength: 0.05}}
+  - {op: local_contrast, params: {clarity: 0.20, texture: 0.10}}
+  - {op: sharpen, params: {amount: 0.50, radius: 1.0, masking: 0.25}}
+  - {op: tone_curve, params: {mode: luma, points: [[0.0, 0.02], [0.25, 0.21], [0.75, 0.80], [1.0, 1.0]]}}
+  - {op: grain, params: {amount: 0.03, size: 1.2, roughness: 0.5, midtone_bias: 0.7}}
+  - {op: vignette, params: {amount: -0.15}}
+variants:
+  color:
+    stack:
+      - {op: monochrome, enabled: false}
+      - {op: grain, enabled: false}
+      - {op: contrast, params: {contrast: 0.10}}
+      - {op: highlights_shadows, params: {highlights: -15, shadows: 15, blacks: 0, whites: 0}}
+      - {op: vibrance, params: {amount: 8}}
+      - {op: local_contrast, params: {clarity: 0.10, texture: 0.05}}

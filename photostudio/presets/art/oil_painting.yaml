@@ -1,0 +1,20 @@
+name: oil_painting
+kind: art
+title: Oil painting
+description: 'Oil-paint filter: neighbourhood-mode (OpenCV xphoto oilPainting algorithm) on 24 intensity bins, brush-edge
+  detail boost and a canvas weave.'
+tags:
+- painterly
+- raster
+stack:
+- op: oil_paint
+  params: {}
+variants:
+  thick:
+    stack:
+    - op: oil_paint
+      params:
+        radius: 8
+        levels: 16
+options:
+  slot: C

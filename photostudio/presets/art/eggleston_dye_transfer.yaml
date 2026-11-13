@@ -1,0 +1,13 @@
+name: eggleston_dye_transfer
+kind: art
+title: Dye-transfer colour
+description: 'William Eggleston-inspired dye-transfer colour: dense saturated reds and greens, warm yellow-ish neutrals, strong
+  tonal density, very fine grain.'
+tags:
+- photographer
+- color
+stack:
+- op: eggleston
+  params: {}
+options:
+  slot: B

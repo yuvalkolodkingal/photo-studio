@@ -1,0 +1,11 @@
+name: xray
+kind: art
+title: X-ray
+description: 'X-ray: B&W negative through a blue-white gradient with edge glow and mild vignette.'
+tags:
+- process
+stack:
+- op: xray
+  params: {}
+options:
+  slot: B

@@ -1,0 +1,21 @@
+name: cross_process
+kind: art
+title: Cross-process
+description: 'E6 slide in C41 chemistry: per-channel curves give yellow-green highlights and cyan-blue shadows with high contrast
+  and saturation. Variant: C41 in E6.'
+tags:
+- film
+- process
+- color
+- retro
+stack:
+- op: cross_process
+  params: {}
+variants:
+  c41_in_e6:
+    stack:
+    - op: cross_process
+      params:
+        variant: c41_in_e6
+options:
+  slot: B

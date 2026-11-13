@@ -1,0 +1,21 @@
+name: mondrian_grid
+kind: art
+title: Mondrian grid
+description: 'Mondrian-style: image-adaptive quadtree snapped to strong edges, leaves coloured white / red / blue / yellow
+  (white-biased), thick black dividing lines.'
+tags:
+- painterly
+- raster
+stack:
+- op: mondrian
+  params:
+    white_bias: 1.6
+variants:
+  busy:
+    stack:
+    - op: mondrian
+      params:
+        max_depth: 6
+        variance: 0.04
+options:
+  slot: C

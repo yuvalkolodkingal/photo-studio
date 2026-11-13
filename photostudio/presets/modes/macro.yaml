@@ -1,0 +1,28 @@
+name: macro
+kind: mode
+title: Macro
+description: >
+  Diffraction and chromatic aberration management with accurate colour.
+  ca_correct auto on (lateral CA) and defringe 40; capture_sharpen 0.9 and a small-radius sharpen (amount 0.70, radius 0.8,
+  masking 0.3) to counter diffraction at f/8+ on APS-C; highlights -25 (petal / wing highlights), shadows +10,
+  contrast +0.05; local_contrast texture +0.25, clarity +0.07; vibrance +5, saturation 0 (flowers saturate easily; the
+  saturation op is Oklch hue-preserving). A masked background pass (ai_subject inverted) takes texture -0.20,
+  clarity -0.10 and -0.2 EV to isolate the subject. No focus-stacking here (separate tool).
+tags: [macro, closeup, focus-stack]
+stack:
+  - {op: ca_correct, params: {auto: true}}
+  - {op: defringe, params: {amount: 40}}
+  - {op: capture_sharpen, params: {amount: 0.9}}
+  - {op: highlights_shadows, params: {highlights: -25, shadows: 10}}
+  - {op: contrast, params: {contrast: 0.05}}
+  - {op: vibrance, params: {amount: 5}}
+  - {op: local_contrast, params: {texture: 0.25, clarity: 0.07}}
+  - {op: sharpen, params: {amount: 0.70, radius: 0.8, masking: 0.3}}
+  - op: local_contrast
+    id: bg
+    params: {texture: -0.20, clarity: -0.10}
+    mask: {type: ai_subject, invert: true, feather: 6}
+  - op: exposure
+    id: bg_ev
+    params: {ev: -0.2}
+    mask: {type: ai_subject, invert: true, feather: 8}

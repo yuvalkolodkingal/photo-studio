@@ -1,0 +1,20 @@
+name: hevc_10bit
+kind: video
+title: HEVC 10-bit master (libx265, CRF 20)
+description: >
+  Compact high-quality master: libx265 10-bit 4:2:0 (hvc1 tag for Apple players), CRF 20, BT.709 tags, audio passed
+  through. The `hdr10` variant preserves an HDR-PQ clip (R50 HDR PQ mode: BT.2020 / SMPTE 2084 tags, mastering display
+  and content-light metadata) instead of tone-mapping it to SDR.
+tags: [hevc, h265, 10bit, master]
+stack: []
+options:
+  container: mp4
+  hdr: tonemap
+  video: {codec: hevc, encoder: libx265, preset: medium, crf: 20, pix_fmt: yuv420p10le, gop: half_fps, bframes: 3, tag: hvc1}
+  audio: {mode: auto, codec: aac, bitrate: 256k, rate: 48000, channels: 2}
+  movflags: +faststart
+variants:
+  hdr10:
+    options:
+      hdr: passthrough
+      video: {codec: hevc, encoder: libx265, preset: medium, crf: 20, pix_fmt: yuv420p10le, gop: half_fps, bframes: 3, tag: hvc1}

@@ -1,0 +1,34 @@
+name: reels_9x16_1080x1920
+kind: video
+title: Reels / TikTok / Shorts 9:16 (1080x1920, 30 fps)
+description: >
+  Vertical 1080x1920 H.264 + AAC for Instagram Reels, TikTok and YouTube Shorts. Landscape footage is reframed
+  with a blurred, darkened copy filling the frame (the `crop` variant centre-crops instead, `pad` letterboxes
+  with black). 30 fps, CRF 20 under an 8 Mbps cap; keep clips under 3 minutes for Reels.
+tags: [reels, tiktok, shorts, vertical, social, h264]
+stack: []
+options:
+  container: mp4
+  reframe: {width: 1080, height: 1920, mode: blur, blur: 40}
+  fps: 30
+  hdr: tonemap
+  video:
+    codec: h264
+    encoder: libx264
+    preset: slow
+    crf: 20
+    profile: high
+    pix_fmt: yuv420p
+    gop: fps
+    bframes: 2
+    maxrate: 8M
+    bufsize: 16M
+  audio: {mode: auto, codec: aac, bitrate: 192k, rate: 48000, channels: 2}
+  movflags: +faststart
+variants:
+  crop:
+    options:
+      reframe: {width: 1080, height: 1920, mode: crop, x: 0.5}
+  pad:
+    options:
+      reframe: {width: 1080, height: 1920, mode: pad}

@@ -1,0 +1,19 @@
+name: aerochrome
+kind: art
+title: Infrared false colour
+description: 'Aerochrome-style: IR -> red, red -> green, green -> blue; foliage turns pink-red, skies cyan-blue. Variant:
+  plain R<->B channel swap.'
+tags:
+- process
+- color
+stack:
+- op: aerochrome
+  params: {}
+variants:
+  channel_swap:
+    stack:
+    - op: aerochrome
+      params:
+        style: channel_swap
+options:
+  slot: B

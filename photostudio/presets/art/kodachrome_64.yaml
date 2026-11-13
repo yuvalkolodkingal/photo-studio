@@ -1,0 +1,16 @@
+name: kodachrome_64
+kind: art
+title: Kodachrome 64 (emulation)
+description: 'Slide-film classic: hot reds, deep blues, hard highlights, dense blue-leaning shadows, mono grain. Generic emulation;
+  film and brand names are trademarks of their owners.'
+tags:
+- film
+- color
+- retro
+stack:
+- op: film_emulation
+  params:
+    stock: kodachrome_64
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

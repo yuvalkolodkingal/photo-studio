@@ -1,0 +1,13 @@
+name: vhs_tape
+kind: art
+title: VHS tape
+description: 'Consumer VHS: 480-line resample, bled chroma, crushed contrast, line noise, tracking bar, interlace comb, barrel
+  distortion.'
+tags:
+- retro
+- raster
+stack:
+- op: vhs
+  params: {}
+options:
+  slot: C

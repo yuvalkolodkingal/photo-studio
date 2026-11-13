@@ -1,0 +1,24 @@
+name: low_poly
+kind: art
+title: Low-poly facets
+description: 'Low-poly / cubist: Canny-weighted point cloud (1500 points) -> Delaunay triangulation -> mean colour per facet
+  with faint seams.'
+tags:
+- painterly
+- raster
+stack:
+- op: low_poly
+  params: {}
+variants:
+  coarse:
+    stack:
+    - op: low_poly
+      params:
+        points: 600
+  fine:
+    stack:
+    - op: low_poly
+      params:
+        points: 4500
+options:
+  slot: C

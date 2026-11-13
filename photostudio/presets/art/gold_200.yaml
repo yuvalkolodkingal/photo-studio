@@ -1,0 +1,16 @@
+name: gold_200
+kind: art
+title: Gold 200 (emulation)
+description: 'Consumer warm negative: +400K warmth, rich yellows, sat 1.1, warm shadows, grain 0.03. Generic emulation; film
+  and brand names are trademarks of their owners.'
+tags:
+- film
+- color
+- retro
+stack:
+- op: film_emulation
+  params:
+    stock: gold_200
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

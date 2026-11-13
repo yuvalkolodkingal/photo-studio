@@ -1,0 +1,13 @@
+name: fincher_low_key
+kind: art
+title: Green-yellow low key
+description: 'Fincher-style: -0.7 EV, olive mid-tones, teal-black shadows, muted saturation 0.75, contrast 5, fine sharpening
+  and grain.'
+tags:
+- cinema
+- color
+stack:
+- op: fincher
+  params: {}
+options:
+  slot: B

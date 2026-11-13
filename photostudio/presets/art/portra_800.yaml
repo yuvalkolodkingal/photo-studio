@@ -1,0 +1,15 @@
+name: portra_800
+kind: art
+title: Portra 800 (emulation)
+description: 'Higher-ISO portrait negative: gain 4, visible grain (0.045), slightly green shadows. Generic emulation; film
+  and brand names are trademarks of their owners.'
+tags:
+- film
+- color
+stack:
+- op: film_emulation
+  params:
+    stock: portra_800
+options:
+  slot: B
+  note: Generic emulation; film and brand names are trademarks of their owners.

@@ -1,0 +1,18 @@
+name: instagram_square
+kind: export
+title: Instagram square (1080x1080)
+description: 1080x1080 canvas, image fitted inside with white padding (use fit cover to crop). JPEG q90 sRGB.
+tags: [social, instagram]
+options:
+  format: jpeg
+  quality: 90
+  subsampling: "4:4:4"
+  progressive: true
+  icc: srgb
+  width: 1080
+  height: 1080
+  fit: pad
+  pad_color: "#ffffff"
+  sharpen: {target: screen}
+  metadata: copyright
+  name: "{stem}_ig11"

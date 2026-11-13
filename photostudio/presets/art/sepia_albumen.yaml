@@ -1,0 +1,20 @@
+name: sepia_albumen
+kind: art
+title: Sepia / albumen print
+description: 'Albumen print: gradient map #2B1A0E -> #8B5A2B -> #F2E6C9, lifted blacks, yellowed highlights, vignette and
+  fine paper grain. Variant: classic sepia matrix.'
+tags:
+- process
+- retro
+stack:
+- op: sepia
+  params:
+    style: albumen
+variants:
+  classic_matrix:
+    stack:
+    - op: sepia
+      params:
+        style: classic
+options:
+  slot: B
