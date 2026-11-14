@@ -504,9 +504,30 @@ def analyse_workers(shape, opts: StackOptions, n_frames: int) -> int:
     24 MP CR3, measured: an unbounded pool of 14 peaked at 11 GB and was OOM-killed)."""
     h, w = shape
     per = h * w * 3 * 4 * 4.5 / 1024 ** 3 + 0.25
-    budget = opts.mem_gb or 0.6 * _available_gb()
+    sc = min(1.0, opts.work_side / max(h, w))
+    parent = n_frames * h * w * sc * sc * (2 + (1 if opts.align == "scene" else 0)) / 1024 ** 3   # f16 previews (+u8 gray)
+    budget = (opts.mem_gb or 0.6 * _available_gb()) - parent - _rss_gb()
     cores = max(1, (os.cpu_count() or 2) - 2)
     return int(max(1, min(opts.jobs or cores, cores, n_frames, budget // per)))
+
+
+class _HalfList(list):
+    """Registration previews kept at float16 (500 x 2000 px previews are 5 GB as float32 in the parent process,
+    which together with the integration workers overran a 12 GB cap); reads come back as float32."""
+
+    def __getitem__(self, i):
+        v = list.__getitem__(self, i)
+        return v.astype(np.float32) if isinstance(v, np.ndarray) else v
+
+    def __setitem__(self, i, v):
+        list.__setitem__(self, i, v.astype(np.float16) if isinstance(v, np.ndarray) else v)
+
+
+def _rss_gb() -> float:
+    try:
+        return int(open("/proc/self/statm").read().split()[1]) * os.sysconf("SC_PAGE_SIZE") / 1024 ** 3
+    except (OSError, ValueError):
+        return 0.0
 
 
 def _inner_crop(cov: np.ndarray, need: float, step: int = 8) -> tuple[slice, slice]:
@@ -607,7 +628,7 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
         # ---- pass 0: previews, stars, noise -----------------------------------------------------------------
         check()
         say("analyse", 0.0, f"reading {n} frames")
-        previews, stars, noise, metas = [None] * n, [None] * n, np.zeros(n), [None] * n
+        previews, stars, noise, metas = _HalfList([None] * n), [None] * n, np.zeros(n), [None] * n
         with _ctx().Pool(analyse_workers(shape, opts, n), initializer=_init, initargs=(G,)) as pool:
             for k, (i, p, st, sg, shp, _s, lite) in enumerate(pool.imap_unordered(_pass0, range(n))):
                 if tuple(shp) != tuple(shape):
@@ -627,7 +648,9 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
         d = np.zeros((n, 2))
         resp = np.ones(n)
         tb = track_bright(previews) if np.median(nstars) < 12 and opts.align != "scene" else None
-        if tb is not None:                       # star-poor sky with one dominant star: follow it
+        if opts.align == "scene":                # landscape registration does not need the sky motion track
+            pass
+        elif tb is not None:                     # star-poor sky with one dominant star: follow it
             tpos, tok = tb
             d[1:] = np.diff(tpos, axis=0)
             resp[1:] = (tok[1:] & tok[:-1]).astype(float) + 1e-3
@@ -784,6 +807,21 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
             G["cache"], G["vcache"] = str(workdir / "cache.npy"), str(workdir / "vcache.npy")
             _mm(G["cache"], (nu, H, W, 3), np.float16)
             _mm(G["vcache"], (nu, H, W), np.uint8)
+        # free the registration data, then size the integration pool from the memory that is really left
+        import gc
+
+        previews = None
+        for m in metas:
+            if m:
+                m.pop("_gray", None)
+        if mode == "scene":
+            grays = None   # noqa: F841
+        gc.collect()
+        h_, w_ = shape
+        per = h_ * w_ * 3 * 4 * (7 if opts.halves else 5) / 1024 ** 3 + 0.6
+        left = (opts.mem_gb or 0.6 * _available_gb()) - _rss_gb()
+        jobs = int(max(1, min(jobs, left // per)))
+        notes.append(f"integration with {jobs} workers ({left:.1f} GB left for them)")
         chunks = [list(range(j, nu, jobs)) for j in range(jobs)]
         chunks = [(k, c) for k, c in enumerate(chunks) if c]
         mpc = _ctx()
