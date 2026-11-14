@@ -107,6 +107,11 @@ Every command accepts `--json`; `photo COMMAND --help` documents flags.
 - **Import and backup** verified import (BLAKE3), second copy, 3-2-1 backup to local drives, rclone and restic.
 - **Export** presets for web, Instagram, print TIFF, archive, wallpaper and email; naming templates, ICC, watermark, borders.
 - **Stacking** HDR, focus, astro, star trails, long exposure, median, panorama preview.
+- **Astro stacker** `photo astro stack|finish|gui`: a Sequator-style night-sky stacker with a browser GUI. It handles
+  untracked or hand-rested cameras (camera-nudge detection, star-poor city skies, frozen foreground), runs two-pass
+  sigma-clipped integration on all cores within a RAM budget, and finishes with light-pollution removal, star colour,
+  auto brightness, HDR, star-protected denoise and split-half validation of faint stars.
+  See [docs/astro-stacking.md](docs/astro-stacking.md).
 - **Video** ffmpeg-based grading with the same looks (baked LUT), per-shot grading, stabilise, denoise, stills, timelapse.
 
 ## Honest limits

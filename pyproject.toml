@@ -40,7 +40,7 @@ lens = ["lensfunpy>=1.15"]
 video = ["av>=12", "scenedetect>=0.6"]
 heif = ["pillow-heif>=0.16"]
 jxl = ["pillow-jxl-plugin>=1.3"]
-astro = ["astroalign>=2.5"]
+astro = ["astroalign>=2.5", "astropy>=6.0"]
 geo = ["reverse_geocoder>=1.5"]
 fast = ["numba>=0.59", "xxhash>=3.4"]
 denoise = ["bm3d>=4.0"]          # non-commercial licence: personal use only
@@ -81,6 +81,7 @@ exclude = ["tests*"]
 [tool.setuptools.package-data]
 photostudio = [
   "web/static/**",
+  "astro/static/**",
   "presets/**/*.yaml",
   "data/**",
 ]

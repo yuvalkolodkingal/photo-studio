@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+- `photo astro stack | finish | gui`: a Sequator-style night-sky stacker (`photostudio.astro`)
+  - registration: star matching plus a RANSAC homography for rich fields; bright-star tracking with mini-stacks and
+    guarded coarse-to-fine ECC for star-poor city skies; foreground-safe eroded sky masks
+  - automatic camera-nudge detection with a jitter-adaptive threshold; frames taken while the camera moved are dropped
+  - two-pass streaming kappa-sigma or winsorized integration with noise weights, on a process pool sized by a RAM
+    budget, a float16 warped-frame cache, independent half stacks, and a maximal-rectangle crop
+  - finishing: light-pollution removal, catalogue-free star colour calibration, auto-brightness asinh stretch, HDR,
+    star enhancement, star-protected noise reduction, split-half validation of faint sources
+  - a browser GUI laid out like Sequator, with live re-finishing; FITS input and output; JSON report
+- the `astro` extra now includes astropy (FITS)
+
 ## 0.1.0 — 2026-11-13
 
 First release.

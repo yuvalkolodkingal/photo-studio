@@ -106,3 +106,36 @@ and shows in the catalog. Keep the source frames; stacking never touches them.
   star-pattern voting on synthetic stars). Not verified on real astro or real bracketed R50 frames.
 - Hand-held brackets need `--align`, and moving subjects need `--deghost`; the results are not magic.
 - Highlights that clip in every frame of an HDR stay clipped.
+
+
+## photo astro (full night-sky stacker)
+
+`photo stack astro` is the quick path. `photo astro` is the full Sequator-style stacker. It handles untracked or
+hand-rested cameras: drift, camera nudges, frames taken while moving, star-poor city skies and foreground trees. It
+also writes a linear result, two half stacks and a JSON report. Design notes: [docs/astro-stacking.md](../docs/astro-stacking.md).
+
+```bash
+photo astro stack sky/*.CR3 --out sky.tif --horizon 0.3 --validate          # trees in the bottom 30 %
+photo astro stack sky/*.CR3 --darks darks/*.CR3 --lens --freeze-ground --out sky.tif
+photo astro stack sky/*.CR3 --reject max --out trails.jpg                    # star trails
+photo astro stack sky/*.CR3 --draft --out quick.jpg                          # half-size decode, fast preview
+photo astro finish sky_linear.tif --hdr --black 1 --denoise 0.7 --out v2.tif # re-finish without re-stacking
+photo astro gui --open                                                      # Sequator-like browser GUI
+```
+
+- **Registration (`--align`):** `auto` picks `stars` (12 or more reliable stars per frame: asterism match plus a RANSAC
+  homography) or `ecc`. `ecc` tracks the brightest star, builds `--group`-frame mini-stacks and runs a guarded
+  coarse-to-fine ECC. Use `--reference N` (1-based) to choose the base frame.
+- **Nudges:** found automatically. The threshold is `max(--nudge-px, 12 × median jitter)`. Runs shorter than 3 frames
+  are dropped as "camera moving". The report lists `nudges_before`, `segments` and the drop reasons.
+- **Integration (`--reject`):** `sigma` (default), `winsor`, `mean` or `max`, with `--kappa` (2.5). Weights are
+  1/noise² (or `--weights equal`). `--keep 0.8` keeps the best frames.
+- **Finishing:** light-pollution removal (`--no-light-pollution` to skip), star colour calibration (`--no-colour`),
+  auto brightness (`--brightness 0.10`), `--stretch` (0 = auto), `--black` (sky sigmas; 0 is natural), `--hdr`,
+  `--enhance-stars`, `--denoise` and `--saturation`. Use `--camera-rgb` for FITS from Siril or DSS.
+- **Validation (`--validate`):** counts faint sources confirmed in both independent half stacks and reports the test's
+  false-alarm rate.
+- **Performance:** two streaming passes on a process pool. `--jobs` (default: cores − 2) is limited by `--mem-gb`
+  (default: 60% of available RAM). Warped frames are cached as float16 in `--workdir`; point it at a real disk, needing
+  about frames × 150 MB. On a 16 GB machine, run large stacks with `systemd-run --user --scope -p MemoryMax=11G`.
+- **Inputs:** CR3 and other raws, TIFF, JPEG, PNG, and FITS (the `astro` extra installs astropy).
