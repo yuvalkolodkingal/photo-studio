@@ -258,6 +258,11 @@ photo stack trails night_*.CR3 --out /tmp/trails.jpg --method lighten
 photo develop /tmp/hdr.tif --mode landscape --preview 1600 --out /tmp/hdr_prev.jpg     # the result is an ordinary image
 ```
 
+For real night-sky sequences, prefer `photo astro stack` (Sequator-style: nudge detection, star-poor
+registration, two-pass sigma clipping on all cores within a RAM budget, light-pollution removal, colour, auto brightness,
+split-half validation) or the browser GUI `photo astro gui --open`. Re-finish without re-stacking with
+`photo astro finish X_linear.tif`.
+
 Other kinds: `pano` (preview-grade OpenCV stitcher, needs 30 percent overlap and texture; for full-resolution panoramas
 use Hugin), `long`, `median`. Details: [references/multiframe.md](references/multiframe.md).
 
