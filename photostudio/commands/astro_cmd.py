@@ -60,9 +60,10 @@ def _progress(args):
 
     def p(stage, frac, msg=""):
         pct = int(frac * 100)
-        if stage != last["stage"] or pct >= last["pct"] + 5 or stage == "done":
+        new = stage != last["stage"] or msg.split(":")[0] != last.get("label")
+        if new or pct >= last["pct"] + 5 or stage == "done":
             print(f"[{stage:>11}] {pct:3d}%  {msg}", file=sys.stderr, flush=True)
-            last.update(stage=stage, pct=pct)
+            last.update(stage=stage, pct=pct, label=msg.split(":")[0])
     return p
 
 
@@ -90,7 +91,7 @@ def cmd_stack(args):
         bias=_expand(args.bias, args) if args.bias else (), freeze_ground=fg, horizon=args.horizon,
         halves=not args.no_halves, nudge_px=args.nudge_px, crop=not args.no_crop, jobs=args.jobs, mem_gb=args.mem_gb,
         cache=args.cache, workdir=args.workdir, draft=args.draft, homography=not args.no_homography,
-        weights=args.weights)
+        weights=args.weights, min_cover=args.min_cover)
     res = engine.stack(files, opts, progress=_progress(args))
     out = args.out or str(Path(files[0]).with_name(f"{Path(files[0]).stem}_astro.tif"))
     ret = {"out": None, "frames": len(files)}
@@ -175,8 +176,9 @@ def register(subparsers) -> None:
     g.add_argument("--bias", nargs="+")
     g.add_argument("--lens", action="store_true", help="lensfun distortion + vignetting correction ('reduce distortion')")
     g = q.add_argument_group("registration")
-    g.add_argument("--align", default="auto", choices=["auto", "stars", "ecc", "none"],
-                   help="auto picks stars (rich fields) or ecc mini-stacks (city skies with few stars)")
+    g.add_argument("--align", default="auto", choices=["auto", "stars", "ecc", "scene", "none"],
+                   help="auto picks stars (rich fields) or ecc mini-stacks (city skies with few stars); scene aligns on the "
+                        "landscape (city / foreground noise stacks, works across zoom and reframing)")
     g.add_argument("--reference", type=int, help="base frame number (1-based); default: middle of the longest steady run")
     g.add_argument("--group", type=int, default=8, help="ecc: frames per mini-stack (default 8)")
     g.add_argument("--nudge-px", type=float, default=8.0, help="minimum jump (px) counted as a camera nudge; the real threshold "
@@ -194,6 +196,7 @@ def register(subparsers) -> None:
     g.add_argument("--no-halves", action="store_true", help="skip the split-half stacks (saves RAM)")
     g.add_argument("--validate", action="store_true", help="count faint sources confirmed in both half stacks")
     g.add_argument("--no-crop", action="store_true")
+    g.add_argument("--min-cover", type=float, default=0.9, help="crop to where this fraction of frames contributes")
     g = q.add_argument_group("performance")
     g.add_argument("--jobs", type=int, default=0, help="worker processes (0 = cores-2, limited by --mem-gb)")
     g.add_argument("--mem-gb", type=float, default=0.0, help="RAM budget (default 60%% of available)")

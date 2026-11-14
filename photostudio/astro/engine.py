@@ -51,7 +51,7 @@ class Cancelled(RuntimeError):
 # --------------------------------------------------------------------------- options / result
 @dataclass
 class StackOptions:
-    align: str = "auto"              # auto | stars | ecc | none
+    align: str = "auto"              # auto | stars | ecc | scene | none   (scene = align on the landscape/city)
     reject: str = "sigma"            # sigma | winsor | mean | max
     kappa: float = 2.5
     weights: str = "noise"           # noise (1/sigma^2) | equal
@@ -75,6 +75,7 @@ class StackOptions:
     draft: bool = False              # half-size raw decode (4x faster, for previews)
     work_side: int = 2000            # long edge of the registration previews
     homography: bool = True          # allow homography refinement (wide-field projection / residual distortion)
+    min_cover: float = 0.9           # crop to where at least this fraction of the frames contributes
 
 
 @dataclass
@@ -182,7 +183,13 @@ def _pass0(i: int):
         xi = np.clip((stars[:, 0] * s).round().astype(int), 0, w - 1)
         yi = np.clip((stars[:, 1] * s).round().astype(int), 0, h - 1)
         stars = stars[cv2.dilate(sm, np.ones((3, 3), np.uint8))[yi, xi] > 12 * nz]
-    return i, prev, stars, nz, img.shape[:2], s, lite
+    gray = None
+    if _G.get("want_gray"):              # scene registration: a tone-mapped luminance preview for feature matching
+        lum = np.maximum(img.mean(2), 0)
+        lum = cv2.resize(lum, (prev.shape[1], prev.shape[0]), interpolation=cv2.INTER_AREA)
+        hi = float(np.percentile(lum, 99.5)) or 1.0
+        gray = (np.clip(np.log1p(200 * lum / hi) / np.log1p(200), 0, 1) * 255).astype(np.uint8)
+    return i, prev, stars, nz, img.shape[:2], s, {**lite, "_gray": gray}
 
 
 # --------------------------------------------------------------------------- motion, nudges, segments
@@ -492,6 +499,16 @@ def plan_jobs(shape, opts: StackOptions, n_frames: int) -> int:
     return int(max(1, min(j, n_frames, budget // per)))
 
 
+def analyse_workers(shape, opts: StackOptions, n_frames: int) -> int:
+    """Pass-0 workers each hold one decoded frame plus the raw decoder's buffers (~4.5 full-frame float planes for a
+    24 MP CR3, measured: an unbounded pool of 14 peaked at 11 GB and was OOM-killed)."""
+    h, w = shape
+    per = h * w * 3 * 4 * 4.5 / 1024 ** 3 + 0.25
+    budget = opts.mem_gb or 0.6 * _available_gb()
+    cores = max(1, (os.cpu_count() or 2) - 2)
+    return int(max(1, min(opts.jobs or cores, cores, n_frames, budget // per)))
+
+
 def _inner_crop(cov: np.ndarray, need: float, step: int = 8) -> tuple[slice, slice]:
     """Largest axis-aligned rectangle where coverage >= need (maximal-rectangle-in-histogram on a downsampled mask)."""
     H, W = cov.shape
@@ -533,7 +550,9 @@ def _resolve_ground(opts: StackOptions, ref_img: np.ndarray) -> np.ndarray | Non
 
 
 def _ctx():
-    return mp.get_context("fork" if threading.current_thread() is threading.main_thread() else "forkserver")
+    # forkserver, never fork: rawpy/LibRaw and OpenCV use OpenMP, and forking a process that has started OpenMP
+    # threads can deadlock the children
+    return mp.get_context("forkserver")
 
 
 # --------------------------------------------------------------------------- main entry
@@ -567,7 +586,7 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
             flat = np.maximum(flat, 1e-6)
             flat = flat / flat.reshape(-1, 3).mean(0)
         G = {"files": files, "dark": dark, "flat": flat, "bias": bias, "lens": opts.lens, "draft": opts.draft,
-             "work_side": opts.work_side}
+             "work_side": opts.work_side, "want_gray": opts.align == "scene"}
         _init(G)
         ref_guess = opts.reference if opts.reference is not None else n // 2
         ref_img, _ = _calibrated(files[ref_guess])
@@ -589,7 +608,7 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
         check()
         say("analyse", 0.0, f"reading {n} frames")
         previews, stars, noise, metas = [None] * n, [None] * n, np.zeros(n), [None] * n
-        with _ctx().Pool(min(jobs * 2, max(1, (os.cpu_count() or 2) - 2)), initializer=_init, initargs=(G,)) as pool:
+        with _ctx().Pool(analyse_workers(shape, opts, n), initializer=_init, initargs=(G,)) as pool:
             for k, (i, p, st, sg, shp, _s, lite) in enumerate(pool.imap_unordered(_pass0, range(n))):
                 if tuple(shp) != tuple(shape):
                     raise ValueError(f"frame {files[i]} is {shp[1]}x{shp[0]}, expected {shape[1]}x{shape[0]}")
@@ -607,7 +626,7 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
         say("motion", 0.0, "measuring drift and camera nudges")
         d = np.zeros((n, 2))
         resp = np.ones(n)
-        tb = track_bright(previews) if np.median(nstars) < 12 else None
+        tb = track_bright(previews) if np.median(nstars) < 12 and opts.align != "scene" else None
         if tb is not None:                       # star-poor sky with one dominant star: follow it
             tpos, tok = tb
             d[1:] = np.diff(tpos, axis=0)
@@ -618,6 +637,8 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
                 d[i], resp[i] = _phase(previews[i - 1], previews[i])
         thr = opts.nudge_px * scale
         segments, nudges, moving = find_segments(d, resp, thr, opts.min_segment)
+        if opts.align == "scene":              # each frame is matched to the base on its own: keep them all
+            segments, moving = [list(range(n))], []
         pos = np.cumsum(d, 0)                                 # sky position per frame (preview px)
         if moving:
             notes.append(f"dropped {len(moving)} frames taken while the camera moved")
@@ -653,6 +674,31 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
         dropped: dict[int, str] = {i: "camera moving" for i in moving}
         if mode == "none":
             mats = {i: np.eye(3) for i in cand}
+        elif mode == "scene":   # static landscape / city: SIFT features + RANSAC homography on the whole frame
+            sift = cv2.SIFT_create(4000)
+            grays = {i: metas[i].pop("_gray") for i in cand}
+            kr, dr = sift.detectAndCompute(grays[ref], None)
+            bf = cv2.BFMatcher()
+            for k, i in enumerate(cand):
+                check()
+                if i == ref:
+                    mats[i], quality[i] = np.eye(3), float(len(kr))
+                    continue
+                ki, di = sift.detectAndCompute(grays[i], None)
+                good = [] if di is None or dr is None else \
+                    [a for a, b in (m for m in bf.knnMatch(di, dr, k=2) if len(m) == 2) if a.distance < 0.75 * b.distance]
+                if len(good) < 12:
+                    dropped[i] = "does not overlap the base frame"
+                    continue
+                src = np.float32([ki[a.queryIdx].pt for a in good])
+                dst = np.float32([kr[a.trainIdx].pt for a in good])
+                Hp, inl = cv2.findHomography(src, dst, cv2.RANSAC, 1.5)
+                nin = int(inl.sum()) if inl is not None else 0
+                if Hp is None or nin < 40:
+                    dropped[i] = f"scene match too weak ({nin} inliers)"
+                    continue
+                mats[i], quality[i] = D @ Hp @ Di, float(nin)
+                say("register", (k + 1) / len(cand), f"frame {i + 1}: {nin} matched features")
         elif mode == "stars":
             rs = stars[ref][:, :2]
             for k, i in enumerate(cand):
@@ -825,7 +871,7 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
         # ---- crop ---------------------------------------------------------------------------------------------------
         crop = (slice(None), slice(None))
         if opts.crop:
-            crop = _inner_crop(cov, 0.9 * nu)
+            crop = _inner_crop(cov, opts.min_cover * nu)
         out = np.ascontiguousarray(out[crop])
         if half_a is not None:
             half_a, half_b = np.ascontiguousarray(half_a[crop]), np.ascontiguousarray(half_b[crop])
