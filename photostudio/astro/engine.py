@@ -76,6 +76,11 @@ class StackOptions:
     work_side: int = 2000            # long edge of the registration previews
     homography: bool = True          # allow homography refinement (wide-field projection / residual distortion)
     min_cover: float = 0.9           # crop to where at least this fraction of the frames contributes
+    static_subtract: bool = False    # subtract a synthetic dark: the per-pixel median of ~31 frames spread through the
+                                     # series (stars move out of it; hot pixels, ground lights and glow stay)
+    valid_mask: object = None        # HxW array in frame pixels (1 = use): pixels outside never enter the stack
+    transforms: dict | None = None   # precomputed 3x3 frame->reference matrices {frame index: M} (full-res px);
+                                     # skips registration (frames without a matrix are dropped)
 
 
 @dataclass
@@ -260,6 +265,45 @@ def track_bright(previews: Sequence[np.ndarray], min_snr: float = 15.0) -> tuple
     return pos, ok
 
 
+def static_points(stars: Sequence[np.ndarray], tol: float = 1.5, frac: float = 0.5, samples: int = 40) -> np.ndarray:
+    """Points that sit at the same pixel in most frames spread through the sequence: hot pixels, and lights on the
+    ground that the sky mask missed. Real stars drift with the sky and never qualify (on an untracked camera).
+    Returns (k,2) xy positions."""
+    from scipy.spatial import cKDTree
+
+    n = len(stars)
+    idx = np.unique(np.linspace(0, n - 1, min(samples, n)).round().astype(int))
+    lists = [stars[i][:, :2] for i in idx if len(stars[i])]
+    if len(lists) < 4:
+        return np.zeros((0, 2))
+    trees = [cKDTree(l) for l in lists]
+    cand = np.vstack(lists)
+    hits = np.zeros(len(cand), int)
+    for t in trees:
+        d, _ = t.query(cand, distance_upper_bound=tol)
+        hits += np.isfinite(d)
+    st = cand[hits >= frac * len(lists)]
+    # it must also sit still between the first and the last quarter of the sequence: slow-drifting stars in a
+    # short sequence can look "fixed" in neighbouring frames but not across the whole span
+    q = max(1, len(lists) // 4)
+    early, late = cKDTree(np.vstack(lists[:q])), cKDTree(np.vstack(lists[-q:]))
+    if len(st):
+        st = st[np.isfinite(early.query(st, distance_upper_bound=tol)[0]) &
+                np.isfinite(late.query(st, distance_upper_bound=tol)[0])]
+    if len(st) == 0:
+        return np.zeros((0, 2))
+    # merge duplicates
+    keep, tree = [], cKDTree(st)
+    used = np.zeros(len(st), bool)
+    for i in range(len(st)):
+        if used[i]:
+            continue
+        grp = tree.query_ball_point(st[i], tol)
+        used[grp] = True
+        keep.append(st[grp].mean(0))
+    return np.array(keep)
+
+
 def find_segments(d: np.ndarray, resp: np.ndarray, thr: float, min_segment: int) -> tuple[list[list[int]], list[int], list[int]]:
     """Split a sequence at camera nudges. d[i] = motion from frame i-1 to i (d[0] = 0). A nudge is a step that departs
     from the median drift by more than thr, or a step where phase correlation lost the stars. Returns (segments,
@@ -359,10 +403,22 @@ def _refine_homography(ref_xy: np.ndarray, xy: np.ndarray, M: np.ndarray, tol: f
 # --------------------------------------------------------------------------- integration workers
 def _warp(img: np.ndarray, M: np.ndarray, shape) -> tuple[np.ndarray, np.ndarray]:
     h, w = shape
+    if _G.get("static") is not None:          # synthetic dark (see StackOptions.static_subtract)
+        img = img - _G["static"] + _G["static_level"]
     out = cv2.warpPerspective(img, M, (w, h), flags=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
-    valid = cv2.warpPerspective(np.ones(img.shape[:2], np.float32), M, (w, h), flags=cv2.INTER_LINEAR,
+    vm = _G.get("valid_mask")
+    base = np.ones(img.shape[:2], np.float32) if vm is None else vm
+    valid = cv2.warpPerspective(base, M, (w, h), flags=cv2.INTER_LINEAR,
                                 borderMode=cv2.BORDER_CONSTANT, borderValue=0) > 0.999
     return np.maximum(out, 0).astype(np.float32), valid
+
+
+def _load_slot(job):
+    k, i = job
+    img, _ = _calibrated(_G["files"][i])
+    a = np.load(_G["static_mm"], mmap_mode="r+")
+    a[k] = img.astype(np.float16)
+    return k
 
 
 def _mm(path, shape, dtype=np.float32, mode="w+"):
@@ -638,6 +694,23 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
                 if cancel.is_set():
                     pool.terminate()
                     check()
+        if opts.align in ("auto", "stars", "ecc"):
+            stat = static_points(stars)
+            if len(stat):
+                from scipy.spatial import cKDTree
+
+                tree = cKDTree(stat)
+                before = int(np.median([len(s) for s in stars]))
+                stars = [s[~np.isfinite(tree.query(s[:, :2], distance_upper_bound=2.0)[0])] if len(s) else s for s in stars]
+                for i in range(n):                    # blank them in the registration previews too
+                    pv = previews[i]
+                    sc_ = scale
+                    for x, y in stat:
+                        xi, yi = int(round(x * sc_)), int(round(y * sc_))
+                        pv[max(0, yi - 2):yi + 3, max(0, xi - 2):xi + 3] = 0
+                    previews[i] = pv
+                notes.append(f"ignored {len(stat)} fixed points (hot pixels / ground lights); "
+                             f"median stars per frame {before} -> {int(np.median([len(s) for s in stars]))}")
         nstars = np.array([len(s) for s in stars])
         lens_notes = {m.get("_lens_note") for m in metas if m and m.get("_lens_note")}
         notes += sorted(lens_notes)
@@ -683,7 +756,7 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
             mids = [i for i in longest if i in cand] or cand
             ref = mids[len(mids) // 2]
         mode = opts.align
-        if mode == "auto":
+        if mode == "auto" and opts.transforms is None:
             mode = "stars" if np.median(nstars[cand]) >= 12 else "ecc"
             notes.append(f"registration: {mode} (median {int(np.median(nstars[cand]))} stars per frame)")
 
@@ -695,7 +768,14 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
         mats: dict[int, np.ndarray] = {}
         quality: dict[int, float] = {}
         dropped: dict[int, str] = {i: "camera moving" for i in moving}
-        if mode == "none":
+        if opts.transforms is not None:
+            mode = "given"
+            for i in cand:
+                if i in opts.transforms:
+                    mats[i] = np.asarray(opts.transforms[i], np.float64)
+                else:
+                    dropped[i] = "no transform supplied"
+        elif mode == "none":
             mats = {i: np.eye(3) for i in cand}
         elif mode == "scene":   # static landscape / city: SIFT features + RANSAC homography on the whole frame
             sift = cv2.SIFT_create(4000)
@@ -800,6 +880,27 @@ def stack(files: Sequence, opts: StackOptions | None = None, progress: ProgressF
         need = nu * H * W * 3 * 2 + nu * H * W
         want_cache = opts.cache == "on" or (opts.cache == "auto" and opts.reject in ("sigma", "winsor")
                                              and shutil.disk_usage(workdir).free > need * 1.3)
+        if opts.valid_mask is not None:
+            vm = np.asarray(opts.valid_mask, np.float32)
+            if vm.shape != tuple(shape):
+                vm = cv2.resize(vm, (shape[1], shape[0]), interpolation=cv2.INTER_NEAREST)
+            G["valid_mask"] = (vm > 0.5).astype(np.float32)
+        if opts.static_subtract:
+            say("integrate", 0.0, "building the synthetic dark")
+            pick = [used[int(j)] for j in np.unique(np.linspace(0, len(used) - 1, min(31, len(used))).round())]
+            G["static_mm"] = str(workdir / "static.npy")
+            _mm(G["static_mm"], (len(pick), *shape, 3), np.float16)
+            with _ctx().Pool(analyse_workers(shape, opts, 0), initializer=_init, initargs=(G,)) as pool:
+                list(pool.imap_unordered(_load_slot, list(enumerate(pick))))
+            st = np.load(G["static_mm"], mmap_mode="r")
+            med = np.zeros((*shape, 3), np.float32)
+            for y0 in range(0, shape[0], 256):
+                med[y0:y0 + 256] = np.median(np.asarray(st[:, y0:y0 + 256], np.float32), axis=0)
+            del st
+            os.remove(G["static_mm"])
+            G["static"] = med
+            G["static_level"] = np.median(med.reshape(-1, 3), 0).astype(np.float32)
+            notes.append(f"subtracted a synthetic dark from {len(pick)} frames")
         G.update({"shape": shape, "used": used, "mats": [mats[i].tolist() for i in used], "weights": w.tolist(),
                   "half_of": half_of, "n_used": nu, "dir": str(workdir), "kappa": opts.kappa, "reject": opts.reject,
                   "freeze": sky is not None, "cancel": cancel})
